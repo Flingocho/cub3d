@@ -17,7 +17,7 @@
 # define OK 0
 # define ERROR 1
 
-# include "libft.h"
+# include "../libft/include/libft.h"
 # include "mlx.h"
 # include <X11/keysym.h>
 # include <ctype.h>
