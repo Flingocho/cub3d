@@ -34,8 +34,8 @@ int	check_args(int argc, char *argv[], t_vars *vars)
 	if (check_args_number(argc) == OK && check_argv_extension(argv) == OK
 		&& check_map_exists(argv[1], vars) == OK)
 	{
-		printf("OK -> assigned map path\n");
 		read_fd_file(vars);
+		return (OK);
 	}
 	else
 	{

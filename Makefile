@@ -1,4 +1,4 @@
-SRCS		=	main.c check_args.c check_map.c parser.c
+SRCS		=	main.c init_vars.c check_args.c check_map.c parser.c cleaner.c
 INCLUDE		=	include
 LIBFT		=	libft
 MINILIBX	=	minilibx-linux
