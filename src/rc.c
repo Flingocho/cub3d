@@ -126,7 +126,6 @@ void	update_movement(t_game *game)
 {
 	double margin = 0.2; // Margen de colisión
 	double newX, newY;
-	/* Movimiento hacia adelante (W) */"███████"
 	if (game->key_w)
 	{
 		newX = game->player_x + game->dir_x * MOVE_SPEED;
