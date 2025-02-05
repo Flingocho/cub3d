@@ -51,8 +51,8 @@ int	main(int argc, char *argv[])
 
 	init_vars(&vars);
 	if (check_args(argc, argv, vars) == OK && check_map_valid(vars) == OK)
-		load_textures(vars);
-	print_status(vars);
+		print_status(vars);
+	load_textures(vars);
 	mlx_hook(vars->game->win, 2, 1L << 0, key_press, vars);
 	mlx_hook(vars->game->win, 3, 1L << 1, key_release, vars->game);
 	mlx_hook(vars->game->win, 17, 0, close_window, vars);
