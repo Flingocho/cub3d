@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:23:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/05 11:02:03 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:08:56 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ int	main(int argc, char *argv[])
 	init_vars(&vars);
 	if (check_args(argc, argv, vars) == OK && check_map_valid(vars) == OK)
 		print_status(vars);
-	mlx_hook(vars->game->win, 2, 1L << 0, key_press, vars->game);
+	mlx_hook(vars->game->win, 2, 1L << 0, key_press, vars);
 	mlx_hook(vars->game->win, 3, 1L << 1, key_release, vars->game);
-	mlx_hook(vars->game->win, 17, 0, close_window, vars->game);
+	mlx_hook(vars->game->win, 17, 0, close_window, vars);
 	mlx_loop_hook(vars->game->mlx, render, vars->game);
 	mlx_loop(vars->game->mlx);
 	clean_exit(vars);
