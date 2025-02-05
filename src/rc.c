@@ -22,7 +22,7 @@ void	clear_image(t_img *img)
 }
 
 // Función que realiza el raycasting y dibuja la escena
-void	render_scene(t_game *game)
+void	render_scene(t_vars *vars)
 {
 	double	cameraX;
 	double	rayDirX;
@@ -31,7 +31,7 @@ void	render_scene(t_game *game)
 	int		mapY;
 	double	deltaDistX;
 	double	deltaDistY;
-		double perpWallDist;
+	double	perpWallDist;
 	int		lineHeight;
 	int		drawStart;
 	int		drawEnd;
@@ -40,26 +40,26 @@ void	render_scene(t_game *game)
 	int		d;
 	int		texY;
 	int		color;
+	t_img	texture;
+	double	wallX;
 
 	for (int x = 0; x < WIDTH; x++)
 	{
 		cameraX = 2 * x / (double)WIDTH - 1;
-		rayDirX = game->dir_x + game->plane_x * cameraX;
-		rayDirY = game->dir_y + game->plane_y * cameraX;
-		mapX = (int)game->player_x;
-		mapY = (int)game->player_y;
+		rayDirX = vars->game->dir_x + vars->game->plane_x * cameraX;
+		rayDirY = vars->game->dir_y + vars->game->plane_y * cameraX;
+		mapX = (int)vars->game->player_x;
+		mapY = (int)vars->game->player_y;
 		double sideDistX, sideDistY;
 		deltaDistX = fabs(1 / rayDirX);
 		deltaDistY = fabs(1 / rayDirY);
 		int stepX, stepY, hit = 0, side;
 		stepX = (rayDirX < 0) ? -1 : 1;
-		sideDistX = (rayDirX < 0) ? (game->player_x - mapX) * deltaDistX
-									: (mapX + 1.0 - game->player_x)
-										* deltaDistX;
+		sideDistX = (rayDirX < 0) ? (vars->game->player_x - mapX) * deltaDistX : (mapX
+				+ 1.0 - vars->game->player_x) * deltaDistX;
 		stepY = (rayDirY < 0) ? -1 : 1;
-		sideDistY = (rayDirY < 0) ? (game->player_y - mapY) * deltaDistY
-									: (mapY + 1.0 - game->player_y)
-										* deltaDistY;
+		sideDistY = (rayDirY < 0) ? (vars->game->player_y - mapY) * deltaDistY : (mapY
+				+ 1.0 - vars->game->player_y) * deltaDistY;
 		while (!hit)
 		{
 			if (sideDistX < sideDistY)
@@ -74,13 +74,11 @@ void	render_scene(t_game *game)
 				mapY += stepY;
 				side = 1;
 			}
-			if (game->world_map[mapY][mapX] > 0)
+			if (vars->game->world_map[mapY][mapX] > 0)
 				hit = 1;
 		}
-		perpWallDist = (side == 0) ? (mapX - game->player_x + (1 - stepX) / 2)
-			/ rayDirX
-									: (mapY - game->player_y + (1 - stepY) / 2)
-										/ rayDirY;
+		perpWallDist = (side == 0) ? (mapX - vars->game->player_x + (1 - stepX) / 2)
+			/ rayDirX : (mapY - vars->game->player_y + (1 - stepY) / 2) / rayDirY;
 		lineHeight = (int)(HEIGHT / perpWallDist);
 		drawStart = -lineHeight / 2 + HEIGHT / 2;
 		drawEnd = lineHeight / 2 + HEIGHT / 2;
@@ -88,11 +86,10 @@ void	render_scene(t_game *game)
 			drawStart = 0;
 		if (drawEnd >= HEIGHT)
 			drawEnd = HEIGHT - 1;
-		texNum = game->world_map[mapY][mapX] - 1;
-		t_img texture = game->textures[side ? (rayDirY < 0 ? NORTH : SOUTH)
-											: (rayDirX < 0 ? WEST : EAST)];
-		double wallX = (side == 0) ? game->player_y + perpWallDist * rayDirY
-									: game->player_x + perpWallDist * rayDirX;
+		texNum = vars->game->world_map[mapY][mapX] - 1;
+		texture = vars->game->textures[side ? (rayDirY < 0 ? NORTH : SOUTH) : (rayDirX < 0 ? WEST : EAST)];
+		wallX = (side == 0) ? vars->game->player_y + perpWallDist
+			* rayDirY : vars->game->player_x + perpWallDist * rayDirX;
 		wallX -= floor(wallX);
 		texX = (int)(wallX * (double)(texture.width));
 		if ((side == 0 && rayDirX > 0) || (side == 1 && rayDirY < 0))
@@ -103,12 +100,12 @@ void	render_scene(t_game *game)
 			texY = ((d * texture.height) / lineHeight) / 256;
 			color = *(unsigned int *)(texture.addr + (texY * texture.line_length
 						+ texX * (texture.bpp / 8)));
-			put_pixel(&game->img, x, y, color);
+			put_pixel(&vars->game->img, x, y, color);
 		}
 		for (int y = 0; y < drawStart; y++)
-			put_pixel(&game->img, x, y, 0x00BFFF);
+			put_pixel(&vars->game->img, x, y, vars->colors->c_hex);
 		for (int y = drawEnd; y < HEIGHT; y++)
-			put_pixel(&game->img, x, y, 0x8B4513);
+			put_pixel(&vars->game->img, x, y, vars->colors->f_hex);
 	}
 }
 
@@ -129,19 +126,18 @@ void	update_movement(t_game *game)
 {
 	double margin = 0.2; // Margen de colisión
 	double newX, newY;
-	/* Movimiento hacia adelante (W) */
+	/* Movimiento hacia adelante (W) */"███████"
 	if (game->key_w)
 	{
 		newX = game->player_x + game->dir_x * MOVE_SPEED;
 		newY = game->player_y + game->dir_y * MOVE_SPEED;
 		/* Se comprueba la colisión en el eje X: se agrega el margen en la dirección del movimiento */
-		if (game->world_map[(int)(game->player_y)]
-							[(int)(newX + (game->dir_x > 0 ? margin :
-										-margin))] == 0)
+		if (game->world_map[(int)(game->player_y)][(int)(newX
+				+ (game->dir_x > 0 ? margin : -margin))] == 0)
 			game->player_x = newX;
 		/* Se comprueba la colisión en el eje Y */
-		if (game->world_map[(int)(newY + (game->dir_y > 0 ? margin : -margin))]
-							[(int)(game->player_x)] == 0)
+		if (game->world_map[(int)(newY + (game->dir_y > 0 ? margin :
+					-margin))][(int)(game->player_x)] == 0)
 			game->player_y = newY;
 	}
 	/* Movimiento hacia atrás (S) */
@@ -149,12 +145,11 @@ void	update_movement(t_game *game)
 	{
 		newX = game->player_x - game->dir_x * MOVE_SPEED;
 		newY = game->player_y - game->dir_y * MOVE_SPEED;
-		if (game->world_map[(int)(game->player_y)]
-							[(int)(newX - (game->dir_x > 0 ? margin :
-										-margin))] == 0)
+		if (game->world_map[(int)(game->player_y)][(int)(newX
+				- (game->dir_x > 0 ? margin : -margin))] == 0)
 			game->player_x = newX;
-		if (game->world_map[(int)(newY - (game->dir_y > 0 ? margin : -margin))]
-							[(int)(game->player_x)] == 0)
+		if (game->world_map[(int)(newY - (game->dir_y > 0 ? margin :
+					-margin))][(int)(game->player_x)] == 0)
 			game->player_y = newY;
 	}
 	/* Movimiento lateral hacia la derecha (D) */
@@ -162,13 +157,11 @@ void	update_movement(t_game *game)
 	{
 		newX = game->player_x + game->plane_x * MOVE_SPEED;
 		newY = game->player_y + game->plane_y * MOVE_SPEED;
-		if (game->world_map[(int)(game->player_y)]
-							[(int)(newX + (game->plane_x > 0 ? margin :
-										-margin))] == 0)
+		if (game->world_map[(int)(game->player_y)][(int)(newX
+				+ (game->plane_x > 0 ? margin : -margin))] == 0)
 			game->player_x = newX;
 		if (game->world_map[(int)(newY + (game->plane_y > 0 ? margin :
-					-margin))]
-							[(int)(game->player_x)] == 0)
+					-margin))][(int)(game->player_x)] == 0)
 			game->player_y = newY;
 	}
 	/* Movimiento lateral hacia la izquierda (A) */
@@ -176,13 +169,11 @@ void	update_movement(t_game *game)
 	{
 		newX = game->player_x - game->plane_x * MOVE_SPEED;
 		newY = game->player_y - game->plane_y * MOVE_SPEED;
-		if (game->world_map[(int)(game->player_y)]
-							[(int)(newX - (game->plane_x > 0 ? margin :
-										-margin))] == 0)
+		if (game->world_map[(int)(game->player_y)][(int)(newX
+				- (game->plane_x > 0 ? margin : -margin))] == 0)
 			game->player_x = newX;
 		if (game->world_map[(int)(newY - (game->plane_y > 0 ? margin :
-					-margin))]
-							[(int)(game->player_x)] == 0)
+					-margin))][(int)(game->player_x)] == 0)
 			game->player_y = newY;
 	}
 	/* Rotación */
@@ -239,11 +230,11 @@ int	close_window(t_vars *vars)
 }
 
 // Función de renderizado (se llama en cada iteración del loop)
-int	render(t_game *game)
+int	render(t_vars *vars)
 {
-	clear_image(&game->img);
-	update_movement(game);
-	render_scene(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+	clear_image(&vars->game->img);
+	update_movement(vars->game);
+	render_scene(vars);
+	mlx_put_image_to_window(vars->game->mlx, vars->game->win, vars->game->img.img, 0, 0);
 	return (0);
 }

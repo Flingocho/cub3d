@@ -64,7 +64,7 @@ $(NAME): $(OBJS)
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c $(HEADER_FILE)
 	@mkdir -p $(dir $@)
-	@echo -n "███████"
+	@echo -n "██████"
 	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 

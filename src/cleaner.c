@@ -1,6 +1,6 @@
 #include "../include/cub3d.h"
 
-static void free_char_matrix(char **mtx)
+void free_char_matrix(char **mtx)
 {
 	int i;
 

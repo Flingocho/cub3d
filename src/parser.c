@@ -6,11 +6,30 @@
 /*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:26:36 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/05 12:06:02 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:21:08 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+static void	assign_colors(t_vars *vars)
+{
+	char	**temp;
+	char	**temp2;
+
+	temp = ft_split(vars->colors->c, ',');
+	temp2 = ft_split(vars->colors->f, ',');
+	vars->colors->c_r = ft_atoi(temp[0]);
+	vars->colors->c_g = ft_atoi(temp[1]);
+	vars->colors->c_b = ft_atoi(temp[2]);
+	vars->colors->f_r = ft_atoi(temp2[0]);
+	vars->colors->f_g = ft_atoi(temp2[1]);
+	vars->colors->f_b = ft_atoi(temp2[2]);
+	free_char_matrix(temp);
+	free_char_matrix(temp2);
+	vars->colors->c_hex = (vars->colors->c_r << 16) | (vars->colors->c_g << 8) | (vars->colors->c_b);
+	vars->colors->f_hex = (vars->colors->f_r << 16) | (vars->colors->f_g << 8) | (vars->colors->f_b);
+}
 
 int	set_value(t_vars *vars, char *value)
 {
@@ -69,6 +88,7 @@ void	parse_file(t_vars *vars)
 		if (vars->file[i][j] != '\0')
 			if (set_value(vars, &vars->file[i][j]) == 2)
 			{
+				assign_colors(vars);
 				vars->map = &vars->file[i];
 				break ;
 			}
