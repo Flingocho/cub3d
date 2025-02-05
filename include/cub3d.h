@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 10:42:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/04 18:44:01 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/05 09:38:03 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,48 @@
 # include <limits.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <ctype.h>
+# include <string.h>
+# include <math.h>
+
+# define WIDTH 1280
+# define HEIGHT 960
+# define MOVE_SPEED 0.1
+# define ROT_SPEED 0.02
+
+// Estructura para la imagen en MLX
+typedef struct s_img
+{
+    void *img;
+    char *addr;
+    int bpp;
+    int line_length;
+    int endian;
+} t_img;
+
+// Estructura principal del juego
+typedef struct s_game
+{
+    void *mlx;
+    void *win;
+    t_img img;
+    double player_x;
+    double player_y;
+    double dir_x;
+    double dir_y;
+    double plane_x;
+    double plane_y;
+    int key_w;
+    int key_a;
+    int key_s;
+    int key_d;
+    int key_left;
+    int key_right;
+    int **world_map;   // Mapa leído del archivo
+    int map_width;     // Ancho del mapa
+    int map_height;    // Alto del mapa
+} t_game;
 
 typedef struct s_player
 {
@@ -84,5 +126,12 @@ void			parse_file(t_vars *vars);
 
 // cleaner.c
 void			clean_exit(t_vars *vars);
+
+// rc.c
+int				key_press(int key, t_game *game);
+int				key_release(int key, t_game *game);
+int				close_window(t_game *game);
+int				render(t_game *game);
+int				parse_map_file(const char *filename, t_game *game);
 
 #endif

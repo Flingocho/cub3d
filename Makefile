@@ -4,21 +4,21 @@ NAME		=		cub3d
 
 # Dependencies	
 LIBFT		=		libft
-MLX			=		minilibx-linux
+MLX			=		mlx
 INC_DIR		=		./include
 HEADER_FILE	=		$(INC_DIR)/cub3d.h
 
 # Sources
 SRC_DIR		=		./src
 SRCS		=		$(addprefix $(SRC_DIR)/, \
-					main.c init_vars.c check_args.c check_map.c parser.c cleaner.c)
+					main.c init_vars.c check_args.c check_map.c parser.c cleaner.c rc.c)
 
 # Objects
 OBJ_DIR		=		./obj
 OBJS		=		$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Compiler
-CFLAGS		=		-Wall -Wextra -Werror
+CFLAGS		=		#-Wall -Wextra -Werror
 MLXFLAGS	=		-L$(MLX) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 CC			=		cc
 
