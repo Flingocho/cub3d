@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 10:42:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/05 09:38:03 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:15:07 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include "../libft/include/libft.h"
 # include "mlx.h"
+# include <X11/Xlib.h>
 # include <X11/keysym.h>
 # include <ctype.h>
 # include <fcntl.h>
@@ -106,6 +107,7 @@ typedef struct s_vars
 	t_player	*player;
 	t_paths		*paths;
 	t_colors	*colors;
+    t_game      *game;
 
 }				t_vars;
 

@@ -1,6 +1,16 @@
 #include "../include/cub3d.h"
 
-static void free_matrix(char **mtx)
+static void free_char_matrix(char **mtx)
+{
+	int i;
+
+	i = 0;
+	while(mtx[i])
+		free(mtx[i++]);
+	free(mtx);
+}
+
+static void free_int_matrix(int **mtx)
 {
 	int i;
 
@@ -29,10 +39,21 @@ static void free_colors(t_vars *vars)
 void clean_exit(t_vars *vars)
 {
 	printf("\nStarting cleaner\n");
-	free_matrix(vars->file);
+	mlx_loop_end(vars->game->mlx);
+	mlx_destroy_image(vars->game->mlx, vars->game->img.img);
+	mlx_destroy_window(vars->game->mlx, vars->game->win);
+	mlx_destroy_display(vars->game->mlx);
+	free(vars->game->mlx);
+	free(vars->game->win);
+	free(vars->game->img.img);
+	free_char_matrix(vars->file);
+	free_int_matrix(vars->game->world_map);
 	free_paths(vars);
 	free_colors(vars);
+	free(vars->paths);
 	free(vars->player);
+	free(vars->colors);
+	free(vars->game);
 	free(vars);
 	printf("\nEND\n\n");
 }
