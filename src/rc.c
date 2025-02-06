@@ -4,27 +4,27 @@
 
 typedef struct s_ray_cast
 {
-	int x;             // Coordenada X del rayo
-	int hit;          
-		// Indicador si el rayo ha colisionado con una pared (1 = sí, 0 = no)
-	int side;         
-		// Indica si el rayo tocó una pared en el eje X (0) o en el Y (1)
-	double cameraX;    // Coordenada X en el espacio de cámara
-	double rayDirX;    // Dirección del rayo en el eje X
-	double rayDirY;    // Dirección del rayo en el eje Y
-	int mapX;          // Posición X en el mapa del mundo
-	int mapY;          // Posición Y en el mapa del mundo
-	double deltaDistX;
-		// Distancia entre el rayo y las líneas del mapa en el eje X
-	double deltaDistY;
-		// Distancia entre el rayo y las líneas del mapa en el eje Y
-	double sideDistX; 
-		// Distancia entre el rayo y el borde más cercano en el eje X
-	double sideDistY; 
-		// Distancia entre el rayo y el borde más cercano en el eje Y
-	int stepX;         // Dirección del paso en el eje X (-1 o 1)
-	int stepY;         // Dirección del paso en el eje Y (-1 o 1)
-}		t_ray_cast;
+	int x; // Coordenada X del rayo
+	int		hit;
+	// Indicador si el rayo ha colisionado con una pared (1 = sí, 0 = no)
+	int		side;
+	// Indica si el rayo tocó una pared en el eje X (0) o en el Y (1)
+	double cameraX; // Coordenada X en el espacio de cámara
+	double rayDirX; // Dirección del rayo en el eje X
+	double rayDirY; // Dirección del rayo en el eje Y
+	int mapX;       // Posición X en el mapa del mundo
+	int mapY;       // Posición Y en el mapa del mundo
+	double	deltaDistX;
+	// Distancia entre el rayo y las líneas del mapa en el eje X
+	double	deltaDistY;
+	// Distancia entre el rayo y las líneas del mapa en el eje Y
+	double	sideDistX;
+	// Distancia entre el rayo y el borde más cercano en el eje X
+	double	sideDistY;
+	// Distancia entre el rayo y el borde más cercano en el eje Y
+	int stepX; // Dirección del paso en el eje X (-1 o 1)
+	int stepY; // Dirección del paso en el eje Y (-1 o 1)
+}			t_ray_cast;
 
 typedef struct s_ray_cast_draw
 {
@@ -39,9 +39,82 @@ typedef struct s_ray_cast_draw
 	int d;               // Distancia utilizada para calcular la textura
 	int texY;            // Coordenada Y de la textura
 	int color;           // Color del píxel actual
-}		t_ray_cast_draw;
+}			t_ray_cast_draw;
 
 ////////////////////////////////////////////
+
+int	darken_color(int color, double distance)
+{
+    // Distancia a partir de la cual la niebla se aplica completamente.
+    double max_distance = 5.0;
+    
+    // Calcula el factor de mezcla: 0.0 cuando distance es 0 y 1.0 cuando distance >= max_distance
+    double fogFactor = distance / max_distance;
+    if (fogFactor > 1.0)
+        fogFactor = 1.0;
+
+    // Extraer los componentes RGB del color original
+    int r = (color >> 16) & 0xFF;
+    int g = (color >> 8)  & 0xFF;
+    int b = color & 0xFF;
+
+    // Define el color de la niebla. Puedes cambiar este valor según el efecto que desees.
+    int fogColor = 0x222222; // Un gris medio. Por ejemplo, 0xAAAAAA o 0xC0C0C0.
+    int fogR = (fogColor >> 16) & 0xFF;
+    int fogG = (fogColor >> 8)  & 0xFF;
+    int fogB = fogColor & 0xFF;
+
+    // Mezcla lineal (interpolación) entre el color original y el de niebla
+    int newR = (int)(r / (1.0 - fogFactor) + fogR * fogFactor);
+    int newG = (int)(g / (1.0 - fogFactor) + fogG * fogFactor);
+    int newB = (int)(b / (1.0 - fogFactor) + fogB * fogFactor);
+
+    // Recomponer el color final
+    return ((newR << 16) | (newG << 8) | newB);
+}
+
+int	apply_fog(int color, double distance, double max_distance)
+{
+	double	fogFactor;
+	int		r, g, b;
+	int		fogColor = 0x000000; // Color de la niebla (gris medio)
+	int		fogR, fogG, fogB;
+	int		newR, newG, newB;
+
+	// Calcula el factor: 0.0 para distancia = 0, 1.0 para distance >= max_distance
+	fogFactor = distance / max_distance;
+	if (fogFactor > 1.0)
+		fogFactor = 1.0;
+
+	// Extraer componentes RGB del color original
+	r = (color >> 16) & 0xFF;
+	g = (color >> 8) & 0xFF;
+	b = color & 0xFF;
+	// Extraer componentes del color de niebla
+	fogR = (fogColor >> 16) & 0xFF;
+	fogG = (fogColor >> 8) & 0xFF;
+	fogB = fogColor & 0xFF;
+	// Interpolación lineal entre el color original y el color de niebla
+	newR = (int)(r * (1.0 - fogFactor) + fogR * fogFactor);
+	newG = (int)(g * (1.0 - fogFactor) + fogG * fogFactor);
+	newB = (int)(b * (1.0 - fogFactor) + fogB * fogFactor);
+	// Recomponer el color
+	return ((newR << 16) | (newG << 8) | newB);
+}
+
+
+void	put_pixel_fog(t_img *img, int x, int y, int color, double fogDistance, double max_distance)
+{
+	char	*dst;
+
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{
+		dst = img->addr + (y * img->line_length + x * (img->bpp / 8));
+		//*(unsigned int *)dst = color;
+		*(unsigned int *)dst = apply_fog(color, fogDistance, max_distance);
+	}
+}
+
 
 /**
  * Función que pone un píxel en una imagen en las coordenadas (x,
@@ -51,7 +124,18 @@ typedef struct s_ray_cast_draw
  * @param y Coordenada Y del píxel.
  * @param color Color en formato hexadecimal.
  */
-void	put_pixel(t_img *img, int x, int y, int color)
+void	put_pixel(t_img *img, t_ray_cast *rc, t_ray_cast_draw *rcw, int color)
+{
+	char	*dst;
+
+	if (rc->x >= 0 && rc->x < WIDTH && rcw->y >= 0 && rcw->y < HEIGHT)
+	{
+		dst = img->addr + (rcw->y * img->line_length + rc->x * (img->bpp / 8));
+		*(unsigned int *)dst = darken_color(color, rcw->d);
+	}
+}
+
+void	put_pixel_clear(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
@@ -77,7 +161,7 @@ void	clear_image(t_img *img)
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(img, x, y, 0x000000);
+			put_pixel_clear(img, x, y, 0x000000);
 			x++;
 		}
 		y++;
@@ -265,17 +349,18 @@ void	calculate_texture_coordinates(t_game *game, t_ray_cast *rc,
  * @param rcw Estructura con los parámetros de dibujo de la pared.
  * @param texture Textura a usar para dibujar la pared.
  */
-void	draw_wall_column(t_game *game, t_ray_cast *rc, t_ray_cast_draw *rcw,
-		t_img *texture)
+void	draw_wall_column(t_game *game, t_ray_cast *rc, t_ray_cast_draw *rcw, t_img *texture)
 {
 	rcw->y = rcw->drawStart;
 	while (rcw->y < rcw->drawEnd)
 	{
+		// Cálculo de la posición en la textura (igual que en tu código)
 		rcw->d = rcw->y * 256 - HEIGHT * 128 + rcw->lineHeight * 128;
 		rcw->texY = ((rcw->d * texture->height) / rcw->lineHeight) / 256;
 		rcw->color = *(unsigned int *)(texture->addr + (rcw->texY
 					* texture->line_length + rcw->texX * (texture->bpp / 8)));
-		put_pixel(&game->img, rc->x, rcw->y, rcw->color);
+		// Para la pared usamos la distancia perpendicular calculada
+		put_pixel_fog(&game->img, rc->x, rcw->y, rcw->color, rcw->perpWallDist, 10.0);
 		rcw->y++;
 	}
 }
@@ -290,19 +375,30 @@ void	draw_wall_column(t_game *game, t_ray_cast *rc, t_ray_cast_draw *rcw,
 void	draw_ceiling_and_floor(t_game *game, t_ray_cast *rc,
 		t_ray_cast_draw *rcw, t_vars *vars)
 {
+	int x = rc->x;
+	double currentDist;
+	
 	rcw->y = 0;
 	while (rcw->y < rcw->drawStart)
 	{
-		put_pixel(&game->img, rc->x, rcw->y, vars->colors->c_hex); // vars->colors->c_hex
+		// Evitar división por cero o valores extremos cerca del horizonte:
+		currentDist = 1.0;
+		if (HEIGHT - 2 * rcw->y != 0)
+			currentDist = HEIGHT / (double)(HEIGHT - 2 * rcw->y);
+		put_pixel_fog(&game->img, x, rcw->y, vars->colors->c_hex, currentDist, 10.0);
 		rcw->y++;
 	}
 	rcw->y = rcw->drawEnd;
 	while (rcw->y < HEIGHT)
 	{
-		put_pixel(&game->img, rc->x, rcw->y, vars->colors->f_hex); // vars->colors->f_hex
+		currentDist = 1.0;
+		if (2 * rcw->y - HEIGHT != 0)
+			currentDist = HEIGHT / (double)(2 * rcw->y - HEIGHT);
+		put_pixel_fog(&game->img, x, rcw->y, vars->colors->f_hex, currentDist, 10.0);
 		rcw->y++;
 	}
 }
+
 
 /**
  * Realiza el renderizado de una columna de pared, utilizando la textura
@@ -326,7 +422,8 @@ void	render_column(t_game *game, t_vars *vars, t_ray_cast *rc)
 // Inicializa los valores de step y sideDist para cada dirección del rayo
 void	initialize_step_and_sidedist(t_game *game, t_ray_cast *rc)
 {
-	// Si la dirección del rayo es negativa en el eje X, ajusta el paso y la distancia al lado.
+	// Si la dirección del rayo es negativa en el eje X,
+	//	ajusta el paso y la distancia al lado.
 	if (rc->rayDirX < 0)
 	{
 		rc->stepX = -1;
@@ -337,7 +434,8 @@ void	initialize_step_and_sidedist(t_game *game, t_ray_cast *rc)
 		rc->stepX = 1;
 		rc->sideDistX = (rc->mapX + 1.0 - game->player_x) * rc->deltaDistX;
 	}
-	// Lo mismo para el eje Y, ajustando el paso y la distancia al lado según la dirección del rayo.
+	// Lo mismo para el eje Y,
+	//	ajustando el paso y la distancia al lado según la dirección del rayo.
 	if (rc->rayDirY < 0)
 	{
 		rc->stepY = -1;
@@ -350,7 +448,8 @@ void	initialize_step_and_sidedist(t_game *game, t_ray_cast *rc)
 	}
 }
 
-// Procesa el raycasting, llama a la DDA para calcular la intersección y luego renderiza la columna
+// Procesa el raycasting,
+//	llama a la DDA para calcular la intersección y luego renderiza la columna
 void	process_ray_casting(t_game *game, t_vars *vars, t_ray_cast *rc)
 {
 	// Realiza la DDA para obtener la intersección del rayo con una pared
@@ -568,17 +667,76 @@ int	key_release(int key, t_game *game)
 	return (0);
 }
 
-// Renderiza la imagen completa en la ventana
+void    draw_square(t_game *game, int x, int y, int color)
+{
+    int i, j;
+    int start_x = MAP_OFFSET + x * TILE_SIZE;
+    int start_y = MAP_OFFSET + y * TILE_SIZE;
+
+    for (i = 0; i < TILE_SIZE; i++)
+    {
+        for (j = 0; j < TILE_SIZE; j++)
+        {
+            mlx_pixel_put(game->mlx, game->win, start_x + j, start_y + i, color);
+        }
+    }
+}
+
+void    draw_player(t_game *game, int x, int y, int color)
+{
+    int i, j;
+    int start_x = MAP_OFFSET + x * TILE_SIZE;
+    int start_y = MAP_OFFSET + y * TILE_SIZE;
+
+    for (i = 0; i < (TILE_SIZE / 5); i++)
+    {
+        for (j = 0; j < (TILE_SIZE / 5); j++)
+        {
+            mlx_pixel_put(game->mlx, game->win, x + j, y + i, color);
+        }
+    }
+}
+
+void draw_minimap(t_game *game)
+{
+    int start_x = (int)(game->player_x) - MINIMAP_RADIUS; // Limite inferior de X
+    int start_y = (int)(game->player_y) - MINIMAP_RADIUS; // Limite inferior de Y
+    int end_x = (int)(game->player_x) + MINIMAP_RADIUS;   // Limite superior de X
+    int end_y = (int)(game->player_y) + MINIMAP_RADIUS;   // Limite superior de Y
+
+    // Asegurarse de no salir de los límites del mapa
+    if (start_x < 0) start_x = 0;
+    if (start_y < 0) start_y = 0;
+    if (end_x >= game->map_width) end_x = game->map_width - 1;
+    if (end_y >= game->map_height) end_y = game->map_height - 1;
+
+    // Dibujar las celdas del minimapa dentro del área visible
+    for (int y = start_y; y <= end_y; y++)
+    {
+        for (int x = start_x; x <= end_x; x++)
+        {
+            if (game->world_map[y][x] == 1)
+                draw_square(game, x - start_x, y - start_y, 0xFFFFFF); // Blanco para paredes
+            else
+                draw_square(game, x - start_x, y - start_y, 0x000000); // Negro para espacios vacíos
+        }
+    }    
+    // Dibujar el jugador como un cuadrado de tamaño TILE_SIZE
+    draw_square(game, game->player_x - start_x, game->player_y - start_y, 0xFF0000);  // Rojo para el jugador
+}
+
 int	render(t_vars *vars)
 {
-	clear_image(&vars->game->img);                                                       
-		// Limpia la imagen
-	update_movement(vars->game);                                                         
-		// Actualiza el movimiento del jugador
+	clear_image(&vars->game->img);
+	// Limpia la imagen
+	update_movement(vars->game);
+	// Actualiza el movimiento del jugador
 	render_scene(vars,
-			vars->game);                                                      
-		// Renderiza la escena
+					vars->game);
+	// Renderiza la escena
 	mlx_put_image_to_window(vars->game->mlx, vars->game->win,
 			vars->game->img.img, 0, 0); // Muestra la imagen
+	draw_minimap(vars->game);
 	return (0);
 }
+
