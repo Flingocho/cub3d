@@ -6,7 +6,7 @@
 /*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:50:03 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/05 12:02:45 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/06 19:26:34 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int	check_valid_charset(t_vars *vars, char c, int i, int j)
 			vars->player->start_orientation = (c);
 			vars->game->player_x = j + 0.5;
 			vars->game->player_y = i + 0.5;
+			vars->player->x_start = i;
+			vars->player->y_start = j;
 			if (c == 'N')
 			{
 				vars->game->dir_x = 0;
@@ -57,27 +59,53 @@ static int	check_valid_charset(t_vars *vars, char c, int i, int j)
 	return (ERROR);
 }
 
-static void set_matrix_int(t_vars *vars)
+static void	set_matrix_int(t_vars *vars)
 {
-    int i;
-    int j;
-    int row_length;
+	int	i;
+	int	j;
+	int	row_length;
 
-    i = 0;
-    while (i < vars->game->map_height)
-    {
-        row_length = ft_strlen(vars->map[i]);
-        j = 0;
-        while (j < vars->game->map_width)
-        {
-            if (j < row_length && vars->map[i][j] == '0')
-                vars->game->world_map[i][j] = 0;
-            else
-                vars->game->world_map[i][j] = 1;
-            j++;
-        }
-        i++;
-    }
+	i = 0;
+	while (i < vars->game->map_height)
+	{
+		row_length = ft_strlen(vars->map[i]);
+		j = 0;
+		while (j < vars->game->map_width)
+		{
+			if (j < row_length && vars->map[i][j] == '0')
+				vars->game->world_map[i][j] = 0;
+			else
+				vars->game->world_map[i][j] = 1;
+			j++;
+		}
+		i++;
+	}
+}
+
+int	check_repeated_position(char **map)
+{
+	int	i;
+	int	j;
+	int	counter;
+
+	i = 0;
+	counter = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
+				|| map[i][j] == 'W')
+					counter++;
+				j++;
+		}
+		i++;
+	}
+	if (counter == 1)
+		return (OK);
+	printf("MAP INVALID\n");
+	return (ERROR);
 }
 
 static int	map_dimensions(t_vars *vars)
@@ -92,12 +120,15 @@ static int	map_dimensions(t_vars *vars)
 		i++;
 	}
 	vars->game->map_height = i;
-	// floodfill
 	i = 0;
-	vars->game->world_map = calloc(vars->game->map_height, sizeof(int *)); // proteger
-	while(i < vars->game->map_height)
-		vars->game->world_map[i++] = calloc(vars->game->map_width, sizeof(int)); // proteger
+	vars->game->world_map = calloc(vars->game->map_height, sizeof(int *));
+	// proteger
+	while (i < vars->game->map_height)
+		vars->game->world_map[i++] = calloc(vars->game->map_width, sizeof(int));
+	// proteger
 	set_matrix_int(vars);
+	if (check_flood(vars) == ERROR)
+		return(printf("Gestionar esta salida!!\n"), exit(ERROR), ERROR);
 	return (OK);
 }
 
@@ -107,6 +138,8 @@ int	check_map_valid(t_vars *vars)
 	int	j;
 
 	i = 0;
+	if (check_repeated_position(vars->map) == ERROR)
+		return(printf("Gestionar esta salida!!\n"), ERROR);
 	while (vars->map[i])
 	{
 		j = 0;
@@ -120,8 +153,8 @@ int	check_map_valid(t_vars *vars)
 		}
 		i++;
 	}
-	if(map_dimensions(vars) == ERROR)
-		return(ERROR);
+	if (map_dimensions(vars) == ERROR)
+		return (ERROR);
 	return (OK);
 }
 

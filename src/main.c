@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:23:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/06 15:44:29 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:34:43 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 // valgrind --leak-check=full --track-fds=yes --track-origins=yes --show-leak-kinds=all ./cub3d maps/map.cub
 
-// floodfill para asegurar mapa valido
-
-// checkear caracteres repetidos en mapa != '1' || '0'
-// y flood fill
 // trim spaces
 
 void	draw_text(void *mlx, void *win)

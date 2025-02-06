@@ -6,7 +6,7 @@
 /*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:26:36 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/05 16:21:08 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:17:07 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	assign_colors(t_vars *vars)
 }
 
 int	set_value(t_vars *vars, char *value)
-{
+{	
 	if (value[0] == '1')
 		return (2);
 	else if (ft_strncmp(value, "NO", 2) == OK)

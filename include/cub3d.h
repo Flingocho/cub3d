@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 10:42:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/06 11:58:36 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:52:54 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define WIDTH 1280
 # define HEIGHT 960
@@ -177,5 +178,8 @@ int				key_release(int key, t_game *game);
 int				close_window(t_vars *vars);
 int				render(t_vars *vars);
 int				parse_map_file(const char *filename, t_game *game);
+
+//flood fill
+int	check_flood(t_vars *vars);
 
 #endif

@@ -11,7 +11,8 @@ HEADER_FILE	=		$(INC_DIR)/cub3d.h
 # Sources
 SRC_DIR		=		./src
 SRCS		=		$(addprefix $(SRC_DIR)/, \
-					main.c init_vars.c check_args.c check_map.c parser.c cleaner.c rc.c)
+					main.c init_vars.c check_args.c check_map.c parser.c cleaner.c rc.c \
+					flood_fill.c)
 
 # Objects
 OBJ_DIR		=		./obj
