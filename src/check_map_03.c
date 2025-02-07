@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   flood_fill.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:36:30 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/06 17:33:07 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:11:12 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	f_fill(t_vars *vars, int row, int col, int size)
+static int	f_fill(t_vars *vars, int row, int col, int size)
 {
 	if (row < 0 || row >= size)
 		return (ERROR);
@@ -34,17 +34,18 @@ int	f_fill(t_vars *vars, int row, int col, int size)
 	return (OK);
 }
 
-int	flood_fill(t_vars *vars, int size)
+static int	flood_fill(t_vars *vars, int size)
 {
 	return (f_fill(vars, vars->player->y_start, vars->player->x_start, size));
 }
 
 int	check_flood(t_vars *vars)
 {
-	int size;
+	int	size;
+
 	size = 0;
-	while(vars->map[size++])
-	if (vars->player->x_start < 0 || vars->player->y_start < 0)
-		return (ERROR);
+	while (vars->map[size++])
+		if (vars->player->x_start < 0 || vars->player->y_start < 0)
+			return (ERROR);
 	return (flood_fill(vars, size));
 }

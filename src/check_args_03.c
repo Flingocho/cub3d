@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:26:36 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/06 16:17:07 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:06:26 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,9 @@ static void	assign_colors(t_vars *vars)
 	vars->colors->f_hex = (vars->colors->f_r << 16) | (vars->colors->f_g << 8) | (vars->colors->f_b);
 }
 
-int	set_value(t_vars *vars, char *value)
-{	
-	if (value[0] == '1')
-		return (2);
-	else if (ft_strncmp(value, "NO", 2) == OK)
-	{
-		vars->paths->no = ft_strdup(value + 3);
-		if (!vars->paths->no)
-			return (perror("malloc"), ERROR);
-	}
-	else if (ft_strncmp(value, "SO", 2) == OK)
-	{
-		vars->paths->so = ft_strdup(value + 3);
-		if (!vars->paths->so)
-			return (perror("malloc"), ERROR);
-	}
-	else if (ft_strncmp(value, "WE", 2) == OK)
+static int	set_value_02(t_vars *vars, char *value)
+{
+	if (ft_strncmp(value, "WE", 2) == OK)
 	{
 		vars->paths->we = ft_strdup(value + 3);
 		if (!vars->paths->we)
@@ -71,6 +57,27 @@ int	set_value(t_vars *vars, char *value)
 		if (!vars->colors->c)
 			return (perror("malloc"), ERROR);
 	}
+	return (OK);
+}
+
+static int	set_value(t_vars *vars, char *value)
+{
+	if (value[0] == '1')
+		return (2);
+	else if (ft_strncmp(value, "NO", 2) == OK)
+	{
+		vars->paths->no = ft_strdup(value + 3);
+		if (!vars->paths->no)
+			return (perror("malloc"), ERROR);
+	}
+	else if (ft_strncmp(value, "SO", 2) == OK)
+	{
+		vars->paths->so = ft_strdup(value + 3);
+		if (!vars->paths->so)
+			return (perror("malloc"), ERROR);
+	}
+	else if (set_value_02(vars, value) == ERROR)
+		return (ERROR);
 	return (OK);
 }
 

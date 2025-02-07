@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:23:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/06 17:34:43 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:40:42 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int	main(int argc, char *argv[])
 	int x;
 	int y;
 
+	
+	printf("%d\n", BONUS);
 	init_vars(&vars);
 	if (check_args(argc, argv, vars) == OK && check_map_valid(vars) == OK)
 		print_status(vars);

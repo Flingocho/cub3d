@@ -36,12 +36,21 @@ static void free_colors(t_vars *vars)
 
 static void free_textures(t_game *game)
 {
-    for (int i = 0; i < 4; i++)
+    int i = 0;
+    while (i < 4)
     {
         if (game->textures[i].img)
             mlx_destroy_image(game->mlx, game->textures[i].img);
+        i++;
     }
+	while(BONUS && i < 8)
+	{
+		if (game->textures[i].img)
+            mlx_destroy_image(game->mlx, game->textures[i].img);
+        i++;
+	}
 }
+
 
 
 void clean_exit(t_vars *vars)
