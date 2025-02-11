@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   check_args_01.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:47:48 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/07 12:00:47 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:30:47 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-//OJO AÑADIR MENSAJE ERROR
 static int	check_args_number(int argc)
 {
 	if (argc == 2)
@@ -20,7 +19,6 @@ static int	check_args_number(int argc)
 	return (ERROR);
 }
 
-//OJO AÑADIR MENSAJE ERROR
 static int	check_argv_extension(char *argv[])
 {
 	int	i;
@@ -41,8 +39,8 @@ int	check_args(int argc, char *argv[], t_vars *vars)
 	}
 	else
 	{
-		printf("Openning default map\n");
-		assign_map_path("maps/map.cub", vars);
+		ft_putstr_fd("Error:\nProblem with arguments.\n", STDERR_FILENO);
+		exit(ERROR);
 	}
 	return (ERROR);
 }

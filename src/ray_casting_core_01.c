@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting_core_01.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 12:50:28 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/07 13:25:31 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:24:40 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	select_texture(t_game *game, t_ray_cast *rc, t_img *texture)
 {
 	static int	i;
 
-	if (game->world_map[rc->mapY][rc->mapX] == 2)
+	if (game->world_map[rc->map_y][rc->map_x] == 2)
 	{
 		if (i >= 40000)
 			i = 0;
@@ -36,14 +36,14 @@ static void	select_texture(t_game *game, t_ray_cast *rc, t_img *texture)
 	}
 	else if (rc->side == 1)
 	{
-		if (rc->rayDirY < 0)
+		if (rc->ray_dir_y < 0)
 			*texture = game->textures[NORTH];
 		else
 			*texture = game->textures[SOUTH];
 	}
 	else
 	{
-		if (rc->rayDirX < 0)
+		if (rc->ray_dir_x < 0)
 			*texture = game->textures[WEST];
 		else
 			*texture = game->textures[EAST];
@@ -53,40 +53,40 @@ static void	select_texture(t_game *game, t_ray_cast *rc, t_img *texture)
 
 static double	calculate_perp_wall_dist(t_game *game, t_ray_cast *rc)
 {
-	double	perpWallDist;
+	double	perp_wall_dist;
 	double	adjustment;
 
 	if (rc->side == 0)
 	{
 		adjustment = 1;
-		if (rc->rayDirX < 0)
+		if (rc->ray_dir_x < 0)
 			adjustment = -1;
-		perpWallDist = (rc->mapX - game->player_x + (1 - adjustment) / 2)
-			/ rc->rayDirX;
+		perp_wall_dist = (rc->map_x - game->player_x + (1 - adjustment) / 2)
+			/ rc->ray_dir_x;
 	}
 	else
 	{
 		adjustment = 1;
-		if (rc->rayDirY < 0)
+		if (rc->ray_dir_y < 0)
 			adjustment = -1;
-		perpWallDist = (rc->mapY - game->player_y + (1 - adjustment) / 2)
-			/ rc->rayDirY;
+		perp_wall_dist = (rc->map_y - game->player_y + (1 - adjustment) / 2)
+			/ rc->ray_dir_y;
 	}
-	return (perpWallDist);
+	return (perp_wall_dist);
 }
 
 static void	calculate_wall_params(t_game *game, t_ray_cast *rc,
 		t_ray_cast_draw *rcw)
 {
-	rcw->perpWallDist = calculate_perp_wall_dist(game, rc);
-	rcw->lineHeight = (int)(HEIGHT / rcw->perpWallDist);
-	rcw->drawStart = (HEIGHT - rcw->lineHeight) / 2;
-	rcw->drawEnd = (HEIGHT + rcw->lineHeight) / 2;
-	if (rcw->drawStart < 0)
-		rcw->drawStart = 0;
-	if (rcw->drawEnd >= HEIGHT)
-		rcw->drawEnd = HEIGHT - 1;
-	rcw->texNum = game->world_map[rc->mapY][rc->mapX] - 1;
+	rcw->perp_wall_dist = calculate_perp_wall_dist(game, rc);
+	rcw->line_height = (int)(HEIGHT / rcw->perp_wall_dist);
+	rcw->draw_start = (HEIGHT - rcw->line_height) / 2;
+	rcw->draw_end = (HEIGHT + rcw->line_height) / 2;
+	if (rcw->draw_start < 0)
+		rcw->draw_start = 0;
+	if (rcw->draw_end >= HEIGHT)
+		rcw->draw_end = HEIGHT - 1;
+	rcw->tex_num = game->world_map[rc->map_y][rc->map_x] - 1;
 }
 
 void	render_column(t_game *game, t_vars *vars, t_ray_cast *rc)

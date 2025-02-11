@@ -13,10 +13,11 @@ HEADER_FILE	=		$(INC_DIR)/cub3d.h
 SRC_DIR		=		./src
 SRCS		=		$(addprefix $(SRC_DIR)/, \
 					main.c init_vars.c check_args_01.c check_args_02.c check_args_03.c \
-					check_map_01.c check_map_02.c check_map_03.c load_textures.c \
-					load_textures_bonus.c key_mapping.c moves.c ray_casting_00.c\
-					ray_casting_init.c ray_casting_core_01.c ray_casting_core_02.c \
-					mini_map.c cleaner.c)
+					check_args_04.c check_map_01.c check_map_02.c check_map_03.c \
+					load_textures.c load_textures_bonus.c key_mapping.c moves.c \
+					ray_casting_00.c ray_casting_init.c ray_casting_core_01.c \
+					ray_casting_core_02.c ray_casting_utils.c mini_map.c cleaner.c \
+					cleaner_utils.c)
 
 # Objects
 OBJ_DIR		=		./obj
@@ -48,14 +49,14 @@ lib:
 
 ascii_art:
 	@if ! $(MAKE) -q $(NAME); then \
-		printf " \033[0;35m                                           \n"; \
-		printf " ██████╗██╗   ██╗██████╗ ██████╗ ██████╗   \n"; \
-		printf "██╔════╝██║   ██║██╔══██╗╚════██╗██╔══██╗  \n"; \
-		printf "██║     ██║   ██║██████╔╝ █████╔╝██║  ██║  \n"; \
-		printf "██║     ██║   ██║██╔══██╗ ╚═══██╗██║  ██║  \n"; \
-		printf "╚██████╗╚██████╔╝██████╔╝██████╔╝██████╔╝  \n"; \
-		printf " ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝   \n"; \
-		printf "               BY JVIDAL-T && MRUBAL-C\033[0m\n"; \
+		printf "	 \033[0;35m                                           \n"; \
+		printf " 	 ██████╗██╗   ██╗██████╗ ██████╗ ██████╗   \n"; \
+		printf "	██╔════╝██║   ██║██╔══██╗╚════██╗██╔══██╗  \n"; \
+		printf "	██║     ██║   ██║██████╔╝ █████╔╝██║  ██║  \n"; \
+		printf "	██║     ██║   ██║██╔══██╗ ╚═══██╗██║  ██║  \n"; \
+		printf "	╚██████╗╚██████╔╝██████╔╝██████╔╝██████╔╝  \n"; \
+		printf "	 ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝   \n"; \
+		printf "  		             BY JVIDAL-T && MRUBAL-C\033[0m\n"; \
 		printf "$(YELLOW)\n[$(NAME)]Compiling program...$(GREEN)\n"; \
 		$(MAKE) -s $(NAME); \
 	else \
@@ -64,15 +65,15 @@ ascii_art:
 
 ascii_art_bonus:
 	@if ! $(MAKE) -q $(NAME_BONUS); then \
-		printf " \033[0;35m                                           \n"; \
-		printf " ██████╗██╗   ██╗██████╗ ██████╗ ██████╗   \n"; \
-		printf "██╔════╝██║   ██║██╔══██╗╚════██╗██╔══██╗  \n"; \
-		printf "██║     ██║   ██║██████╔╝ █████╔╝██║  ██║  \n"; \
-		printf "██║     ██║   ██║██╔══██╗ ╚═══██╗██║  ██║  \n"; \
-		printf "╚██████╗╚██████╔╝██████╔╝██████╔╝██████╔╝  \n"; \
-		printf " ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝   \n"; \
-		printf "               BY JVIDAL-T && MRUBAL-C\033[0m\n"; \
-		printf "$(YELLOW)\n[$(NAME_BONUS)]Compiling program...$(GREEN)\n"; \
+		printf "	 \033[0;35m                                           \n"; \
+		printf "	 ██████╗██╗   ██╗██████╗ ██████╗ ██████╗   \n"; \
+		printf "	██╔════╝██║   ██║██╔══██╗╚════██╗██╔══██╗  \n"; \
+		printf "	██║     ██║   ██║██████╔╝ █████╔╝██║  ██║  \n"; \
+		printf "	██║     ██║   ██║██╔══██╗ ╚═══██╗██║  ██║  \n"; \
+		printf "	╚██████╗╚██████╔╝██████╔╝██████╔╝██████╔╝  \n"; \
+		printf "	 ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝   \n"; \
+		printf "  		             BY JVIDAL-T && MRUBAL-C\033[0m\n"; \
+		printf "$(YELLOW)\n[$(NAME)]Compiling program...$(GREEN)\n"; \
 		$(MAKE) -s $(NAME_BONUS); \
 	else \
 		echo "$(GREEN)[$(NAME_BONUS)] is already up to date.$(NC)"; \
@@ -95,12 +96,12 @@ $(NAME_BONUS): $(OBJS_BONUS)
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c $(HEADER_FILE)
 	@mkdir -p $(dir $@)
-	@echo -n "██████"
+	@echo -n "███"
 	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 $(OBJ_B_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER_FILE)
 	@mkdir -p $(dir $@)
-	@echo -n "██████"
+	@echo -n "███"
 	@$(CC) -D BONUS=1 $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
 
 

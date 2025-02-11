@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_mapping.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 12:15:00 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/07 13:40:51 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:52:03 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,29 @@ int	close_window(t_vars *vars)
 
 static void	manage_door(t_game *game)
 {
-	int	playerX;
-	int	playerY;
+	int	player_x;
+	int	player_y;
 
-	playerX = (int)game->player_x;
-	playerY = (int)game->player_y;
+	player_x = (int)game->player_x;
+	player_y = (int)game->player_y;
 	if (game->door_cooldown > 0)
 		return ;
-	if (game->world_map[playerY][playerX + 1] == 2)
-		game->world_map[playerY][playerX + 1] = 3;
-	else if (game->world_map[playerY][playerX - 1] == 2)
-		game->world_map[playerY][playerX - 1] = 3;
-	else if (game->world_map[playerY + 1][playerX] == 2)
-		game->world_map[playerY + 1][playerX] = 3;
-	else if (game->world_map[playerY - 1][playerX] == 2)
-		game->world_map[playerY - 1][playerX] = 3;
-	else if (game->world_map[playerY][playerX + 1] == 3)
-		game->world_map[playerY][playerX + 1] = 2;
-	else if (game->world_map[playerY][playerX - 1] == 3)
-		game->world_map[playerY][playerX - 1] = 2;
-	else if (game->world_map[playerY + 1][playerX] == 3)
-		game->world_map[playerY + 1][playerX] = 2;
-	else if (game->world_map[playerY - 1][playerX] == 3)
-		game->world_map[playerY - 1][playerX] = 2;
+	if (game->world_map[player_y][player_x + 1] == 2)
+		game->world_map[player_y][player_x + 1] = 3;
+	else if (game->world_map[player_y][player_x - 1] == 2)
+		game->world_map[player_y][player_x - 1] = 3;
+	else if (game->world_map[player_y + 1][player_x] == 2)
+		game->world_map[player_y + 1][player_x] = 3;
+	else if (game->world_map[player_y - 1][player_x] == 2)
+		game->world_map[player_y - 1][player_x] = 3;
+	else if (game->world_map[player_y][player_x + 1] == 3)
+		game->world_map[player_y][player_x + 1] = 2;
+	else if (game->world_map[player_y][player_x - 1] == 3)
+		game->world_map[player_y][player_x - 1] = 2;
+	else if (game->world_map[player_y + 1][player_x] == 3)
+		game->world_map[player_y + 1][player_x] = 2;
+	else if (game->world_map[player_y - 1][player_x] == 3)
+		game->world_map[player_y - 1][player_x] = 2;
 	game->door_cooldown = 5;
 }
 

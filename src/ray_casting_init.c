@@ -3,84 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting_init.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 12:46:24 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/07 12:51:21 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:46:12 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static void	perform_dda(t_game *game, int *mapX, int *mapY, double *sideDistX,
-		double *sideDistY, double deltaDistX, double deltaDistY, int *stepX,
-		int *stepY, int *side, int *hit)
+static void	perform_dda(t_game *game, t_ray_cast *rc)
 {
-	while (!(*hit))
+	while (!(rc->hit))
 	{
-		if (*sideDistX < *sideDistY)
+		if (rc->side_dist_x < rc->side_dist_y)
 		{
-			*sideDistX += deltaDistX;
-			*mapX += *stepX;
-			*side = 0;
+			rc->side_dist_x += rc->delta_dist_x;
+			rc->map_x += rc->step_x;
+			rc->side = 0;
 		}
 		else
 		{
-			*sideDistY += deltaDistY;
-			*mapY += *stepY;
-			*side = 1;
+			rc->side_dist_y += rc->delta_dist_y;
+			rc->map_y += rc->step_y;
+			rc->side = 1;
 		}
-		if (game->world_map[*mapY][*mapX] != 0
-			&& game->world_map[*mapY][*mapX] != 3)
-			*hit = 1;
+		if (game->world_map[rc->map_y][rc->map_x] != 0
+			&& game->world_map[rc->map_y][rc->map_x] != 3)
+			rc->hit = 1;
 	}
 }
 
 void	process_ray_casting(t_game *game, t_vars *vars, t_ray_cast *rc)
 {
-	perform_dda(game, &rc->mapX, &rc->mapY, &rc->sideDistX, &rc->sideDistY,
-			rc->deltaDistX, rc->deltaDistY, &rc->stepX, &rc->stepY, &rc->side,
-			&rc->hit);
+	perform_dda(game, rc);
 	render_column(game, vars, rc);
 }
 
 void	initialize_step_and_sidedist(t_game *game, t_ray_cast *rc)
 {
-	if (rc->rayDirX < 0)
+	if (rc->ray_dir_x < 0)
 	{
-		rc->stepX = -1;
-		rc->sideDistX = (game->player_x - rc->mapX) * rc->deltaDistX;
+		rc->step_x = -1;
+		rc->side_dist_x = (game->player_x - rc->map_x) * rc->delta_dist_x;
 	}
 	else
 	{
-		rc->stepX = 1;
-		rc->sideDistX = (rc->mapX + 1.0 - game->player_x) * rc->deltaDistX;
+		rc->step_x = 1;
+		rc->side_dist_x = (rc->map_x + 1.0 - game->player_x) * rc->delta_dist_x;
 	}
-	if (rc->rayDirY < 0)
+	if (rc->ray_dir_y < 0)
 	{
-		rc->stepY = -1;
-		rc->sideDistY = (game->player_y - rc->mapY) * rc->deltaDistY;
+		rc->step_y = -1;
+		rc->side_dist_y = (game->player_y - rc->map_y) * rc->delta_dist_y;
 	}
 	else
 	{
-		rc->stepY = 1;
-		rc->sideDistY = (rc->mapY + 1.0 - game->player_y) * rc->deltaDistY;
+		rc->step_y = 1;
+		rc->side_dist_y = (rc->map_y + 1.0 - game->player_y) * rc->delta_dist_y;
 	}
 }
 
-void	initialize_ray_position(t_game *game, double rayDirX, double rayDirY,
-		int *mapX, int *mapY, double *deltaDistX, double *deltaDistY)
+void	initialize_ray_position(t_game *game, t_ray_cast *rc)
 {
-	*mapX = (int)game->player_x;
-	*mapY = (int)game->player_y;
-	*deltaDistX = fabs(1 / rayDirX);
-	*deltaDistY = fabs(1 / rayDirY);
+	rc->map_x = (int)game->player_x;
+	rc->map_y = (int)game->player_y;
+	rc->delta_dist_x = fabs(1 / rc->ray_dir_x);
+	rc->delta_dist_y = fabs(1 / rc->ray_dir_y);
 }
 
-void	calculate_ray_direction(t_game *game, int x, double *rayDirX,
-		double *rayDirY, double *cameraX)
+void	calculate_ray_direction(t_game *game, t_ray_cast *rc)
 {
-	*cameraX = 2 * x / (double)WIDTH - 1;
-	*rayDirX = game->dir_x + game->plane_x * (*cameraX);
-	*rayDirY = game->dir_y + game->plane_y * (*cameraX);
+	rc->camera_x = 2 * rc->x / (double)WIDTH - 1;
+	rc->ray_dir_x = game->dir_x + game->plane_x * (rc->camera_x);
+	rc->ray_dir_y = game->dir_y + game->plane_y * (rc->camera_x);
 }

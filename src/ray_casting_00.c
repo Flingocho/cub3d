@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting_00.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:36:12 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/07 13:39:53 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:45:20 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,8 @@ static void	render_scene(t_vars *vars, t_game *game)
 	rc.x = 0;
 	while (rc.x < WIDTH)
 	{
-		calculate_ray_direction(game, rc.x, &rc.rayDirX, &rc.rayDirY,
-				&rc.cameraX);
-		initialize_ray_position(game, rc.rayDirX, rc.rayDirY, &rc.mapX,
-				&rc.mapY, &rc.deltaDistX, &rc.deltaDistY);
+		calculate_ray_direction(game, &rc);
+		initialize_ray_position(game, &rc);
 		initialize_step_and_sidedist(game, &rc);
 		rc.hit = 0;
 		process_ray_casting(game, vars, &rc);
@@ -65,7 +63,7 @@ int	render(t_vars *vars)
 	update_movement(vars->game);
 	render_scene(vars, vars->game);
 	mlx_put_image_to_window(vars->game->mlx, vars->game->win,
-			vars->game->img.img, 0, 0);
+		vars->game->img.img, 0, 0);
 	if (BONUS)
 		draw_minimap(vars->game);
 	if (vars->game->door_cooldown > 0)

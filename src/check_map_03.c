@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   flood_fill.c                                       :+:      :+:    :+:   */
+/*   check_map_03.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:36:30 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/07 12:11:12 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:14:21 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 static int	f_fill(t_vars *vars, int row, int col, int size)
 {
+	int	row_length;
+
 	if (row < 0 || row >= size)
 		return (ERROR);
-	if (col < 0 || col >= (int)ft_strlen(vars->map[row]))
+	row_length = ft_strlen(vars->map[row]);
+	if (col < 0 || col >= row_length)
 		return (ERROR);
-	if (vars->map[row][col] == '1' || vars->map[row][col] == ' ')
-		return (OK);
-	if (vars->map[row][col] == 'F')
+	if (vars->map[row][col] == '1' || vars->map[row][col] == ' '
+		|| vars->map[row][col] == 'F')
 		return (OK);
 	vars->map[row][col] = 'F';
 	if (f_fill(vars, row - 1, col, size) == ERROR)
@@ -36,7 +38,7 @@ static int	f_fill(t_vars *vars, int row, int col, int size)
 
 static int	flood_fill(t_vars *vars, int size)
 {
-	return (f_fill(vars, vars->player->y_start, vars->player->x_start, size));
+	return (f_fill(vars, vars->player->x_start, vars->player->y_start, size));
 }
 
 int	check_flood(t_vars *vars)
@@ -44,8 +46,9 @@ int	check_flood(t_vars *vars)
 	int	size;
 
 	size = 0;
-	while (vars->map[size++])
-		if (vars->player->x_start < 0 || vars->player->y_start < 0)
-			return (ERROR);
+	if (vars->player->x_start < 0 || vars->player->y_start < 0)
+		return (ERROR);
+	while (vars->map[size])
+		size++;
 	return (flood_fill(vars, size));
 }

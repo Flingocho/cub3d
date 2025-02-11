@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_vars.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:32:08 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/07 09:40:35 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:39:26 by jvidal-t         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,17 @@ static void	init_game_values(t_vars *vars)
 	vars->game->map_height = 0;
 }
 
-// OJO PROTEGEME MAMAÑEMA
 static void	init_game(t_vars *vars)
 {
 	vars->game->mlx = mlx_init();
+	if (!vars->game->mlx)
+		return (perror("mlx"), exit(ERROR));
 	vars->game->win = mlx_new_window(vars->game->mlx, WIDTH, HEIGHT, "Cub3d");
+	if (!vars->game->win)
+		return (perror("mlx"), exit(ERROR));
 	vars->game->img.img = mlx_new_image(vars->game->mlx, WIDTH, HEIGHT);
+	if (!vars->game->img.img)
+		return (perror("mlx"), exit(ERROR));
 	vars->game->img.addr = mlx_get_data_addr(vars->game->img.img,
 			&vars->game->img.bpp, &vars->game->img.line_length,
 			&vars->game->img.endian);
@@ -45,14 +50,18 @@ static void	init_game(t_vars *vars)
 	init_game_values(vars);
 }
 
-// OJO PROTEGEME MAMAÑEMA
 void	init_vars(t_vars **vars)
 {
 	*vars = ft_calloc(1, sizeof(t_vars));
+	if (!*vars)
+		return (perror("malloc"), exit(ERROR));
 	(*vars)->game = ft_calloc(1, sizeof(t_game));
 	(*vars)->player = ft_calloc(1, sizeof(t_player));
 	(*vars)->paths = ft_calloc(1, sizeof(t_paths));
 	(*vars)->colors = ft_calloc(1, sizeof(t_colors));
+	if (!(*vars)->game || !(*vars)->player || !(*vars)->paths
+		|| !(*vars)->colors)
+		return (perror("malloc"), exit(ERROR));
 	(*vars)->map_path_fd = 0;
 	(*vars)->bytes_read = 0;
 	(*vars)->map_path = NULL;
