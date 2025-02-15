@@ -6,7 +6,7 @@
 /*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 11:49:35 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/15 14:02:43 by mrubal-c         ###   ########.fr       */
+/*   Updated: 2025/02/15 16:08:56 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	skip_vals_lines(char *file, int *i)
 		while (file[*i] && isspace(file[*i]))
 			(*i)++;
 		if (file[*i] && (file[*i] == '0' || file[*i] == '1'))
-			break;
+			break ;
 	}
 	if (!file[*i])
 		return (ERROR);
