@@ -1,10 +1,18 @@
+
+
+
 SO textures/wall_south.xpm
 WE textures/wall_west.xpm
+
 NO textures/wall_north.xpm
-EA textures/wall_east.xpm
+
 
 C 30,15,15
+EA textures/wall_east.xpm
 F 50,10,10
+
+
+
 
   11111111111111
 111000000000001
@@ -14,3 +22,6 @@ F 50,10,10
 100 000000001111
 1  00000000001
 1111111111111
+
+
+

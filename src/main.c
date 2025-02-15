@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 14:23:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 18:04:50 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/15 13:52:45 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+int	mouse_move(int x, int y, t_game *game)
+{
+	static int	center_x;
+	double		angle;
+
+	(void)y;
+	center_x = WIDTH / 2;
+	if (x != center_x)
+	{
+		angle = (x - center_x) * 0.001;
+		rotate_player(game, angle);
+		mlx_mouse_move(game->mlx, game->win, center_x, HEIGHT / 2);
+	}
+	return (0);
+}
 
 void	draw_images(void *mlx, void *win)
 {
@@ -43,8 +59,6 @@ void	draw_images(void *mlx, void *win)
 int	main(int argc, char *argv[])
 {
 	t_vars	*vars;
-	int		x;
-	int		y;
 
 	init_vars(&vars);
 	if (!(check_args(argc, argv, vars) == OK && check_map_valid(vars) == OK))
@@ -55,6 +69,11 @@ int	main(int argc, char *argv[])
 	mlx_hook(vars->game->win, 3, 1L << 1, key_release, vars->game);
 	mlx_hook(vars->game->win, 17, 0, close_window, vars);
 	mlx_loop_hook(vars->game->mlx, render, vars);
+	if (BONUS)
+	{
+		mlx_mouse_move(vars->game->mlx, vars->game->win, WIDTH / 2, HEIGHT / 2);
+		mlx_hook(vars->game->win, 6, 1L << 6, mouse_move, vars->game);
+	}
 	mlx_loop(vars->game->mlx);
 	clean_exit(vars);
 	return (0);

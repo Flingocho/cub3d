@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting_core_02.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:22:27 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/11 14:36:46 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/15 13:49:59 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	draw_ceiling_and_floor(t_game *game, t_ray_cast *rc,
-		t_ray_cast_draw *rcw, t_vars *vars)
+void	draw_ceiling_and_floor(t_ray_cast *rc, t_ray_cast_draw *rcw,
+		t_vars *vars)
 {
 	int		x;
 	double	current_dist;
@@ -47,6 +47,10 @@ void	draw_wall_column(t_game *game, t_ray_cast *rc, t_ray_cast_draw *rcw,
 	{
 		rcw->d = rcw->y * 256 - HEIGHT * 128 + rcw->line_height * 128;
 		rcw->tex_y = ((rcw->d * texture->height) / rcw->line_height) / 256;
+		if (rcw->tex_y < 0)
+			rcw->tex_y = 0;
+		else if (rcw->tex_y >= texture->height)
+			rcw->tex_y = texture->height - 1;
 		rcw->color = *(unsigned int *)(texture->addr + (rcw->tex_y
 					* texture->line_length + rcw->tex_x * (texture->bpp / 8)));
 		put_pixel_fog_walls(&game->img, rc->x, rcw);

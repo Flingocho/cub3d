@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting_core_01.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 12:50:28 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/11 14:24:40 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/15 13:50:48 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,5 @@ void	render_column(t_game *game, t_vars *vars, t_ray_cast *rc)
 	select_texture(game, rc, &texture);
 	calculate_texture_coordinates(game, rc, &rcw, &texture);
 	draw_wall_column(game, rc, &rcw, &texture);
-	draw_ceiling_and_floor(game, rc, &rcw, vars);
+	draw_ceiling_and_floor(rc, &rcw, vars);
 }

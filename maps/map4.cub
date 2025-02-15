@@ -1,0 +1,16 @@
+SO textures/yellowS.xpm
+WE textures/whiteW.xpm
+NO textures/grayN.xpm
+EA textures/blueE.xpm
+
+C 57, 255, 20
+F 255, 0, 30
+
+111111111111
+100000000001
+100000000001
+100000000001
+10000N000001
+100000000001
+100000000001
+111111111111

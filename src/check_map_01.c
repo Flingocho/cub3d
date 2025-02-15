@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_01.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:50:03 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 18:33:39 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/15 13:49:21 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	map_dimensions(t_vars *vars)
 	i = 0;
 	while (vars->map[i])
 	{
-		if (vars->game->map_width < ft_strlen(vars->map[i]))
+		if ((size_t)vars->game->map_width < ft_strlen(vars->map[i]))
 			vars->game->map_width = ft_strlen(vars->map[i]);
 		i++;
 	}

@@ -26,7 +26,7 @@ OBJS		=		$(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 OBJS_BONUS	=		$(SRCS:$(SRC_DIR)/%.c=$(OBJ_B_DIR)/%.o)
 
 # Compiler
-CFLAGS		=		#-Wall -Wextra -Werror
+CFLAGS		=		-Wall -Wextra -Werror
 MLXFLAGS	=		-L$(MLX) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 CC			=		cc
 

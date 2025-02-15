@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 10:42:01 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 18:27:54 by jvidal-t         ###   ########.fr       */
+/*   Updated: 2025/02/15 16:06:01 by mrubal-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-
-# ifndef BONUS
-#  define BONUS 0
-# endif
 
 // LIBS
 # include <X11/Xlib.h>
@@ -32,7 +28,7 @@
 
 // OWN .H
 # include "../libft/include/libft.h"
-# include "mlx.h"
+# include "../mlx/mlx.h"
 # include "structs.h"
 # include "vals.h"
 
@@ -42,7 +38,6 @@ void	init_vars(t_vars **vars);
 // check_args_01.c
 int		check_args(int argc, char *argv[], t_vars *vars);
 // check_args_02.c
-int		assign_map_path(char *path, t_vars *vars);
 void	read_fd_file(t_vars *vars);
 int		check_map_exists(char *path, t_vars *vars);
 // check_args_03.c
@@ -80,7 +75,7 @@ void	calculate_ray_direction(t_game *game, t_ray_cast *rc);
 // ray_casting_core_01.c
 void	render_column(t_game *game, t_vars *vars, t_ray_cast *rc);
 // ray_casting_core_02.c
-void	draw_ceiling_and_floor(t_game *game, t_ray_cast *rc,
+void	draw_ceiling_and_floor(t_ray_cast *rc,
 			t_ray_cast_draw *rcw, t_vars *vars);
 void	draw_wall_column(t_game *game, t_ray_cast *rc, t_ray_cast_draw *rcw,
 			t_img *texture);
