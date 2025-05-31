@@ -8,8 +8,8 @@
 </div>
 
 <div align="center">
-  <img src="https://github.com/Flingocho/cub3d/images/wall">
-  <img src="https://github.com/Flingocho/cub3d/images/maze">
+  <img src="images/wall.png" width="400" alt="Wall texture sample">
+  <img src="images/maze.png" width="400" alt="Maze example">
   <br><br>
 </div>
 
@@ -232,11 +232,11 @@ All dependencies are included as submodules in the project and are compiled auto
 <summary><b>🖼️ Screenshots</b></summary>
 
 <div align="center">
-  <img src="images/Captura desde 2025-05-31 18-44-04.png" width="400" alt="Game view with textured walls">
+  <img src="images/tester1.png" width="400" alt="Game view with textured walls">
   <p><em>3D view with textured walls and distance-based fog effect</em></p>
   
-  <img src="images/Captura desde 2025-05-31 18-45-24.png" width="400" alt="Minimap feature">
-  <p><em>Minimap navigation aid (bonus feature)</em></p>
+  <img src="images/tester2.png" width="400" alt="Testing room">
+  <p><em>Testing room + minimap view (bonus)</em></p>
 </div>
 </details>
 
@@ -249,5 +249,5 @@ This project is part of the 42 School curriculum and is provided under the [MIT 
 ---
 
 <div align="center">
-  Created with ❤️ by <a href="https://github.com/jvidal-t">Flingocho</a> and <a href="https://github.com/nisp3ro">nisp3ro</a>
+  Created with ❤️ by <a href="https://github.com/Flingocho">Flingocho</a> and <a href="https://github.com/nisp3ro">nisp3ro-c</a>
 </div>
