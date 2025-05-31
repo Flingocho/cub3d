@@ -1,17 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   moves.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 12:19:49 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/11 13:43:07 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Rotates the player's view direction and camera plane
+ *
+ * Applies a rotation transformation to the player's direction vector
+ * and camera plane to change the viewing angle. Uses trigonometric
+ * functions to calculate the new vectors based on the input angle.
+ *
+ * @param game Game structure containing player direction and plane vectors
+ * @param angle Rotation angle in radians (positive for clockwise, negative for counterclockwise)
+ */
 void	rotate_player(t_game *game, double angle)
 {
 	double	old_dir_x;
@@ -25,6 +23,16 @@ void	rotate_player(t_game *game, double angle)
 	game->plane_y = old_plane_x * sin(angle) + game->plane_y * cos(angle);
 }
 
+/**
+ * @brief Moves the player forward in the direction they're facing
+ *
+ * Calculates the new position by adding the direction vector multiplied
+ * by the movement speed to the current position. Includes collision detection
+ * to prevent moving through walls (value 1) while allowing movement through
+ * door spaces (value 3). Uses an offset for better collision detection.
+ *
+ * @param game Game structure containing player position and world map
+ */
 void	move_forward(t_game *game)
 {
 	double	new_x;
@@ -48,6 +56,16 @@ void	move_forward(t_game *game)
 		game->player_y = new_y;
 }
 
+/**
+ * @brief Moves the player backward, opposite to the direction they're facing
+ *
+ * Calculates the new position by subtracting the direction vector multiplied
+ * by the movement speed from the current position. Includes collision detection
+ * to prevent moving through walls (value 1) while allowing movement through
+ * door spaces (value 3). Uses an offset for better collision detection.
+ *
+ * @param game Game structure containing player position and world map
+ */
 void	move_backward(t_game *game)
 {
 	double	new_x;
@@ -71,6 +89,16 @@ void	move_backward(t_game *game)
 		game->player_y = new_y;
 }
 
+/**
+ * @brief Strafes the player to the right
+ *
+ * Moves the player perpendicular to their facing direction by using
+ * the camera plane vector. Includes collision detection to prevent 
+ * moving through walls (value 1) while allowing movement through
+ * door spaces (value 3). Uses an offset for better collision detection.
+ *
+ * @param game Game structure containing player position and world map
+ */
 void	move_right(t_game *game)
 {
 	double	new_x;
@@ -94,6 +122,16 @@ void	move_right(t_game *game)
 		game->player_y = new_y;
 }
 
+/**
+ * @brief Strafes the player to the left
+ *
+ * Moves the player perpendicular to their facing direction by using
+ * the inverse of the camera plane vector. Includes collision detection 
+ * to prevent moving through walls (value 1) while allowing movement through
+ * door spaces (value 3). Uses an offset for better collision detection.
+ *
+ * @param game Game structure containing player position and world map
+ */
 void	move_left(t_game *game)
 {
 	double	new_x;

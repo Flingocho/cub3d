@@ -1,17 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_map_03.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 16:36:30 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 16:14:21 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Recursive flood fill algorithm to check map boundaries
+ * 
+ * This function implements a recursive flood fill algorithm starting from
+ * the player's position. It marks visited cells with 'F' and checks if
+ * the player can "leak" outside the map (which would indicate the map
+ * is not properly enclosed by walls).
+ * 
+ * @param vars The main program structure
+ * @param row Current row in the map
+ * @param col Current column in the map
+ * @param size Total number of rows in the map
+ * @return OK if the area is properly enclosed, ERROR if a boundary leak is found
+ */
 static int	f_fill(t_vars *vars, int row, int col, int size)
 {
 	int	row_length;
@@ -36,11 +38,31 @@ static int	f_fill(t_vars *vars, int row, int col, int size)
 	return (OK);
 }
 
+/**
+ * @brief Start the flood fill algorithm from player's position
+ * 
+ * This function initiates the flood fill algorithm from the player's
+ * starting position to check if the map is properly enclosed.
+ * 
+ * @param vars The main program structure
+ * @param size Total number of rows in the map
+ * @return OK if map is properly enclosed, ERROR otherwise
+ */
 static int	flood_fill(t_vars *vars, int size)
 {
 	return (f_fill(vars, vars->player->x_start, vars->player->y_start, size));
 }
 
+/**
+ * @brief Check if the map is properly enclosed using flood fill
+ * 
+ * This function verifies that the player cannot reach the edge of the map,
+ * which would indicate that the map is not fully enclosed by walls.
+ * It uses a flood fill algorithm starting from the player's position.
+ * 
+ * @param vars The main program structure
+ * @return OK if map is properly enclosed, ERROR otherwise
+ */
 int	check_flood(t_vars *vars)
 {
 	int	size;

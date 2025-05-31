@@ -1,17 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_args_01.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 15:47:48 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 18:30:47 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Check if the correct number of arguments is provided
+ * 
+ * This function verifies that exactly one argument is provided to the program
+ * (the path to the map file).
+ * 
+ * @param argc The argument count from main function
+ * @return OK if exactly one argument is provided, ERROR otherwise
+ */
 static int	check_args_number(int argc)
 {
 	if (argc == 2)
@@ -19,6 +16,15 @@ static int	check_args_number(int argc)
 	return (ERROR);
 }
 
+/**
+ * @brief Check if the provided map file has the correct extension
+ * 
+ * This function verifies that the map file provided has a .cub extension,
+ * which is the required format for the program.
+ * 
+ * @param argv Array of command line arguments
+ * @return OK if the file has a .cub extension, ERROR otherwise
+ */
 static int	check_argv_extension(char *argv[])
 {
 	int	i;
@@ -29,6 +35,20 @@ static int	check_argv_extension(char *argv[])
 	return (ERROR);
 }
 
+/**
+ * @brief Main argument validation function
+ * 
+ * This function performs a series of checks on the command line arguments:
+ * 1. Verifies the correct number of arguments
+ * 2. Checks if the file has the correct extension (.cub)
+ * 3. Ensures the map file exists and can be opened
+ * If all checks pass, it reads the map file and processes its contents
+ * 
+ * @param argc The argument count from main function
+ * @param argv Array of command line arguments
+ * @param vars Pointer to the main structure storing program state
+ * @return OK if all checks pass, ERROR otherwise (with program termination)
+ */
 int	check_args(int argc, char *argv[], t_vars *vars)
 {
 	if (check_args_number(argc) == OK && check_argv_extension(argv) == OK

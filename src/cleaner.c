@@ -1,17 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleaner.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 13:47:10 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 17:50:33 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Clean up all resources and exit the program
+ *
+ * This function performs comprehensive cleanup of all allocated resources,
+ * including:
+ * 1. MLX graphics resources (images, windows, display)
+ * 2. Textures and game data
+ * 3. Map data and configuration
+ * 4. All dynamically allocated structures
+ *
+ * It's called before program termination to prevent memory leaks.
+ *
+ * @param vars The main program structure containing all resources
+ */
 void	clean_exit(t_vars *vars)
 {
 	mlx_loop_end(vars->game->mlx);

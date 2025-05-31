@@ -1,17 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_args_04.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 17:26:36 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 18:42:56 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Helper function to convert color components to RGB values
+ * 
+ * This function converts the string color components to integers and 
+ * calculates the hexadecimal RGB representation for ceiling and floor colors.
+ * 
+ * @param vars The main program structure
+ * @param temp Array of ceiling color component strings (R,G,B)
+ * @param temp2 Array of floor color component strings (R,G,B)
+ */
 static void	assign_colors_2(t_vars *vars, char **temp, char **temp2)
 {
 	vars->colors->c_r = ft_atoi(temp[0]);
@@ -26,6 +24,15 @@ static void	assign_colors_2(t_vars *vars, char **temp, char **temp2)
 		| (vars->colors->f_g << 8) | (vars->colors->f_b);
 }
 
+/**
+ * @brief Parse and convert color strings to RGB values
+ * 
+ * This function processes the floor and ceiling color strings (format: "R,G,B")
+ * and converts them to integer RGB values. It validates that each color has
+ * exactly three components and handles memory allocation for the string parsing.
+ * 
+ * @param vars The main program structure
+ */
 void	assign_colors(t_vars *vars)
 {
 	int		i;

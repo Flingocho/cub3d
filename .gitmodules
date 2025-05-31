@@ -1,0 +1,3 @@
+[submodule "dependencies/libft"]
+	path = dependencies/libft
+	url = git@github.com:Flingocho/libft.git

@@ -4,8 +4,9 @@ NAME		=		cub3d
 NAME_BONUS	=		cub3d_bonus
 
 # Dependencies	
-LIBFT		=		libft
-MLX			=		mlx
+DEPS_DIR	=		dependencies
+LIBFT		=		$(DEPS_DIR)/libft
+MLX			=		$(DEPS_DIR)/mlx
 INC_DIR		=		./include
 HEADER_FILE	=		$(INC_DIR)/cub3d.h
 
@@ -28,6 +29,7 @@ OBJS_BONUS	=		$(SRCS:$(SRC_DIR)/%.c=$(OBJ_B_DIR)/%.o)
 # Compiler
 CFLAGS		=		-Wall -Wextra -Werror
 MLXFLAGS	=		-L$(MLX) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
+LIBFT_FLAGS	=		-L$(LIBFT) -lft
 CC			=		cc
 
 # Colors
@@ -82,39 +84,40 @@ ascii_art_bonus:
 
 $(NAME): $(OBJS)
 	@printf "$(NC)"
-	@make -C $(LIBFT) plus > /dev/null
-	@make -C $(MLX) > /dev/null
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT) -lft $(MLXFLAGS) -o $(NAME) && \
+	@make -C $(LIBFT) bonus > /dev/null
+	@make -C $(MLX) > /dev/null 2>&1
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_FLAGS) $(MLXFLAGS) -o $(NAME) && \
 	(printf "$(UGREEN)\n%s$(NC)" "[$(NAME)]"; printf "$(GREEN)%s$(NC)\n" "Compiled successfully.")
 
 $(NAME_BONUS): $(OBJS_BONUS)
 	@printf "$(NC)"
-	@make -C $(LIBFT) plus > /dev/null
-	@make -C $(MLX) > /dev/null
-	$(CC) -D BONUS=1 $(CFLAGS) $(OBJS_BONUS) -L$(LIBFT) -lft $(MLXFLAGS) -o $(NAME_BONUS) && \
+	@make -C $(LIBFT) bonus > /dev/null
+	@make -C $(MLX) > /dev/null 2>&1
+	$(CC) -D BONUS=1 $(CFLAGS) $(OBJS_BONUS) $(LIBFT_FLAGS) $(MLXFLAGS) -o $(NAME_BONUS) && \
 	(printf "$(UGREEN)\n%s$(NC)" "[$(NAME_BONUS)]"; printf "$(GREEN)%s$(NC)\n" "Compiled successfully.")
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c $(HEADER_FILE)
 	@mkdir -p $(dir $@)
 	@echo -n "███"
-	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(LIBFT)/include -I $(MLX)
 
 $(OBJ_B_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER_FILE)
 	@mkdir -p $(dir $@)
 	@echo -n "███"
-	@$(CC) -D BONUS=1 $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+	@$(CC) -D BONUS=1 $(CFLAGS) -c $< -o $@ -I $(INC_DIR) -I $(LIBFT)/include -I $(MLX)
 
 
 clean:
 	@rm -f $(OBJS)
 	@rm -rf $(OBJ_DIR)
 	@rm -rf $(OBJ_B_DIR)
+	@make -s -C $(MLX) clean > /dev/null
 	@printf "$(RED)%s$(NC)\n" "[$(NAME)] Object files cleaned."
 
 fclean: clean
 	@rm -f $(NAME)
 	@rm -f $(NAME_BONUS)
-	@make -s -C $(LIBFT) fclean
+	@make -s -C $(LIBFT) fclean 
 	@printf "$(RED)%s$(NC)\n" "[$(NAME)] Cleaned successfully."
 
 re:	fclean all

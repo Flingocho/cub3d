@@ -1,17 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_args_02.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 11:49:35 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/15 16:08:56 by mrubal-c         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Skip through configuration lines to find the start of the map data
+ * 
+ * This function navigates through texture and color configuration lines
+ * until it reaches the actual map data (which starts with '0' or '1').
+ * 
+ * @param file The buffer containing the entire map file content
+ * @param i Pointer to the current position in the buffer
+ * @return OK if the map data is found, ERROR if we reach end of file
+ */
 static int	skip_vals_lines(char *file, int *i)
 {
 	while (file[*i])
@@ -31,6 +29,16 @@ static int	skip_vals_lines(char *file, int *i)
 	return (OK);
 }
 
+/**
+ * @brief Check for invalid newlines within the map data
+ * 
+ * This function verifies that the map is contiguous without empty lines
+ * between its data rows. An empty line after map data indicates the end of
+ * the map, but empty lines inside the map data are not allowed.
+ * 
+ * @param file The buffer containing the entire map file content
+ * @return OK if the map is valid, ERROR if invalid empty lines are found
+ */
 static int	check_n_between_map(char *file)
 {
 	int	i;
@@ -58,6 +66,19 @@ static int	check_n_between_map(char *file)
 	return (OK);
 }
 
+/**
+ * @brief Read and process the map file
+ * 
+ * This function reads the map file into a buffer, checks its format,
+ * and prepares it for parsing. It performs the following operations:
+ * 1. Allocates memory for the buffer
+ * 2. Reads the file content into the buffer
+ * 3. Validates the map structure (no empty lines within map data)
+ * 4. Splits the buffer into lines for further processing
+ * 5. Cleans up resources and initiates file parsing
+ * 
+ * @param vars Pointer to the main structure storing program state
+ */
 void	read_fd_file(t_vars *vars)
 {
 	vars->buffer = ft_calloc(sizeof(char *), BUFF_SIZE);
@@ -79,6 +100,16 @@ void	read_fd_file(t_vars *vars)
 	parse_file(vars);
 }
 
+/**
+ * @brief Check if the map file exists and can be opened
+ * 
+ * This function attempts to open the map file to verify it exists
+ * and is accessible for reading.
+ * 
+ * @param path Path to the map file
+ * @param vars Pointer to the main structure storing program state
+ * @return OK if the file exists and can be opened, ERROR otherwise
+ */
 int	check_map_exists(char *path, t_vars *vars)
 {
 	vars->map_path_fd = open(path, O_RDONLY);

@@ -1,17 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   load_textures.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 09:01:20 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/11 18:07:26 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Loads the north texture from file path
+ *
+ * Loads the north texture from the XPM file specified in vars->paths->no
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param vars Main program variables structure containing paths and game data
+ */
 static void	north(t_vars *vars)
 {
 	t_game	*game;
@@ -29,6 +26,15 @@ static void	north(t_vars *vars)
 		exit(1);
 }
 
+/**
+ * @brief Loads the south texture from file path
+ *
+ * Loads the south texture from the XPM file specified in vars->paths->so
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param vars Main program variables structure containing paths and game data
+ */
 static void	south(t_vars *vars)
 {
 	t_game	*game;
@@ -46,6 +52,15 @@ static void	south(t_vars *vars)
 		exit(1);
 }
 
+/**
+ * @brief Loads the east texture from file path
+ *
+ * Loads the east texture from the XPM file specified in vars->paths->ea
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param vars Main program variables structure containing paths and game data
+ */
 static void	east(t_vars *vars)
 {
 	t_game	*game;
@@ -63,6 +78,15 @@ static void	east(t_vars *vars)
 		exit(1);
 }
 
+/**
+ * @brief Loads the west texture from file path
+ *
+ * Loads the west texture from the XPM file specified in vars->paths->we
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param vars Main program variables structure containing paths and game data
+ */
 static void	west(t_vars *vars)
 {
 	t_game	*game;
@@ -80,6 +104,16 @@ static void	west(t_vars *vars)
 		exit(1);
 }
 
+/**
+ * @brief Main texture loading function
+ *
+ * Orchestrates the loading of all directional textures (north, south, east, west).
+ * If the program is compiled with the bonus feature enabled, additional textures
+ * are loaded through the load_textures_bonus function.
+ *
+ * @param vars Main program variables structure containing texture paths and game data
+ * @return OK if all textures are successfully loaded
+ */
 int	load_textures(t_vars *vars)
 {
 	north(vars);

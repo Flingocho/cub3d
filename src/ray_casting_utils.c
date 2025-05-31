@@ -1,17 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ray_casting_utils.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 14:36:11 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 14:36:51 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Applies a distance-based fog effect to a color
+ *
+ * Mixes the original color with a fog color (black by default) based on distance.
+ * As distance increases, the color gradually fades to the fog color, creating
+ * a depth perception effect. The function breaks down the colors into RGB components,
+ * interpolates them based on fog factor, and recombines them.
+ *
+ * @param color Original RGB color value
+ * @param distance Distance from the viewer
+ * @param max_distance Maximum distance before fog is at full effect
+ * @return Modified color with fog effect applied
+ */
 static int	apply_fog(int color, double distance, double max_distance)
 {
 	double	fog_factor;
@@ -36,6 +37,18 @@ static int	apply_fog(int color, double distance, double max_distance)
 	return ((new[0] << 16) | (new[1] << 8) | new[2]);
 }
 
+/**
+ * @brief Draws a pixel on the floor with fog effect applied
+ *
+ * Places a pixel at the specified coordinates in the image buffer,
+ * applying fog effect to the floor color based on the distance from the viewer.
+ * Ensures the pixel coordinates are within the screen boundaries.
+ *
+ * @param vars Main program variables structure containing floor color
+ * @param x X-coordinate in the image buffer
+ * @param y Y-coordinate in the image buffer
+ * @param fogDistance Distance value used to calculate fog intensity
+ */
 void	put_pixel_fog_floor(t_vars *vars, int x, int y, double fogDistance)
 {
 	t_img	*img;
@@ -52,6 +65,18 @@ void	put_pixel_fog_floor(t_vars *vars, int x, int y, double fogDistance)
 	}
 }
 
+/**
+ * @brief Draws a pixel on the ceiling with fog effect applied
+ *
+ * Places a pixel at the specified coordinates in the image buffer,
+ * applying fog effect to the ceiling color based on the distance from the viewer.
+ * Ensures the pixel coordinates are within the screen boundaries.
+ *
+ * @param vars Main program variables structure containing ceiling color
+ * @param x X-coordinate in the image buffer
+ * @param y Y-coordinate in the image buffer
+ * @param fogDistance Distance value used to calculate fog intensity
+ */
 void	put_pixel_fog_ceiling(t_vars *vars, int x, int y, double fogDistance)
 {
 	t_img	*img;
@@ -68,6 +93,17 @@ void	put_pixel_fog_ceiling(t_vars *vars, int x, int y, double fogDistance)
 	}
 }
 
+/**
+ * @brief Draws a pixel on a wall with fog effect applied
+ *
+ * Places a pixel at the specified coordinates in the image buffer,
+ * applying fog effect to the wall texture color based on the perpendicular
+ * wall distance. Ensures the pixel coordinates are within the screen boundaries.
+ *
+ * @param img Image buffer to draw to
+ * @param x X-coordinate in the image buffer
+ * @param rcw Wall rendering information including Y-coordinate, color, and perpendicular distance
+ */
 void	put_pixel_fog_walls(t_img *img, int x, t_ray_cast_draw *rcw)
 {
 	double	max_distance;

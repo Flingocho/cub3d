@@ -1,43 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init_vars.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/05 17:32:08 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/15 13:45:47 by mrubal-c         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
-static void	init_game_values(t_vars *vars)
-{
-	vars->game->player_x = 0;
-	vars->game->player_y = 0;
-	vars->game->dir_x = 0;
-	vars->game->dir_y = 0;
-	vars->game->plane_x = 0;
-	vars->game->plane_y = 0;
-	vars->game->key_w = 0;
-	vars->game->key_a = 0;
-	vars->game->key_s = 0;
-	vars->game->key_d = 0;
-	vars->game->key_e = 0;
-	vars->game->key_left = 0;
-	vars->game->key_right = 0;
-	vars->game->door_cooldown = 0;
-	vars->game->map_width = 0;
-	vars->game->map_height = 0;
-}
-
+/**
+ * @brief Initialize the game's graphical components
+ *
+ * This function sets up the MLX library, creates the game window,
+ * and initializes the main image buffer used for rendering.
+ * It handles both regular and bonus mode window creation.
+ *
+ * @param vars Pointer to the main program structure
+ */
 static void	init_game(t_vars *vars)
 {
 	vars->game->mlx = mlx_init();
 	if (!vars->game->mlx)
 		return (perror("mlx"), exit(ERROR));
-	vars->game->win = mlx_new_window(vars->game->mlx, WIDTH, HEIGHT, "Cub3d");
+	if (BONUS)
+		vars->game->win = mlx_new_window(vars->game->mlx, WIDTH, HEIGHT,
+				"Cub3d_bonus");
+	else
+		vars->game->win = mlx_new_window(vars->game->mlx, WIDTH, HEIGHT,
+				"Cub3d");
 	if (!vars->game->win)
 		return (perror("mlx"), exit(ERROR));
 	vars->game->img.img = mlx_new_image(vars->game->mlx, WIDTH, HEIGHT);
@@ -47,9 +29,18 @@ static void	init_game(t_vars *vars)
 			&vars->game->img.bpp, &vars->game->img.line_length,
 			&vars->game->img.endian);
 	vars->game->world_map = NULL;
-	init_game_values(vars);
 }
 
+/**
+ * @brief Initialize all program structures and resources
+ *
+ * This function allocates and initializes all main data structures
+ * needed for the program, including game state, player info, and
+ * configuration data. It also sets up initial values and
+ * initializes the graphics components.
+ *
+ * @param vars Pointer to the pointer that will store the main structure
+ */
 void	init_vars(t_vars **vars)
 {
 	*vars = ft_calloc(1, sizeof(t_vars));

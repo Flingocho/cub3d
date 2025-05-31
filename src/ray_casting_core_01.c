@@ -1,17 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ray_casting_core_01.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 12:50:28 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/15 13:50:48 by mrubal-c         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Selects the appropriate door texture based on animation frame
+ *
+ * Chooses one of four door textures based on the animation counter value.
+ * This creates an animated door effect when doors are rendered in the game.
+ * The textures cycle through DOOR1, DOOR2, DOOR3, and DOOR4 in sequence.
+ *
+ * @param game Game structure containing the texture arrays
+ * @param i Animation counter value determining which texture to select
+ * @param texture Pointer to texture that will be set to the selected door texture
+ */
 static void	select_door_tex(t_game *game, int i, t_img *texture)
 {
 	if (i <= 10000)
@@ -24,6 +23,19 @@ static void	select_door_tex(t_game *game, int i, t_img *texture)
 		*texture = game->textures[DOOR4];
 }
 
+/**
+ * @brief Selects the appropriate texture based on wall orientation or special blocks
+ *
+ * Determines which texture to use for rendering the current wall segment:
+ * - For doors (value 2), selects an animated door texture
+ * - For vertical walls (side == 1), selects north or south texture based on ray direction
+ * - For horizontal walls (side == 0), selects east or west texture based on ray direction
+ * Maintains a static counter for door animations.
+ *
+ * @param game Game structure containing the texture arrays and world map
+ * @param rc Raycasting information including hit position and direction
+ * @param texture Pointer to texture that will be set to the selected wall texture
+ */
 static void	select_texture(t_game *game, t_ray_cast *rc, t_img *texture)
 {
 	static int	i;
@@ -51,6 +63,19 @@ static void	select_texture(t_game *game, t_ray_cast *rc, t_img *texture)
 	i++;
 }
 
+/**
+ * @brief Calculates the perpendicular distance to the wall hit by the ray
+ *
+ * Computes the distance from the camera plane to the wall hit point, 
+ * perpendicular to the camera plane rather than the actual ray length.
+ * This prevents the fisheye effect by normalizing distances based on
+ * the viewing angle. The calculation method differs depending on whether
+ * the ray hit a vertical (side == 1) or horizontal (side == 0) wall face.
+ *
+ * @param game Game structure containing player position
+ * @param rc Raycasting information including hit position and direction
+ * @return The perpendicular distance to the wall hit point
+ */
 static double	calculate_perp_wall_dist(t_game *game, t_ray_cast *rc)
 {
 	double	perp_wall_dist;
@@ -75,6 +100,18 @@ static double	calculate_perp_wall_dist(t_game *game, t_ray_cast *rc)
 	return (perp_wall_dist);
 }
 
+/**
+ * @brief Calculates parameters needed for wall rendering
+ *
+ * Determines the height of the wall slice to be drawn, along with
+ * the starting and ending Y-coordinates on the screen. Also clamps
+ * these values to ensure they remain within screen boundaries.
+ * The wall height is inversely proportional to the distance from the player.
+ *
+ * @param game Game structure containing the world map
+ * @param rc Raycasting information including hit position
+ * @param rcw Structure to store calculated wall rendering parameters
+ */
 static void	calculate_wall_params(t_game *game, t_ray_cast *rc,
 		t_ray_cast_draw *rcw)
 {
@@ -89,6 +126,20 @@ static void	calculate_wall_params(t_game *game, t_ray_cast *rc,
 	rcw->tex_num = game->world_map[rc->map_y][rc->map_x] - 1;
 }
 
+/**
+ * @brief Renders a single vertical column of the screen
+ *
+ * Orchestrates the rendering process for a single screen column:
+ * 1. Calculates wall dimensions and position
+ * 2. Selects the appropriate texture based on wall orientation
+ * 3. Calculates texture coordinates for mapping
+ * 4. Draws the wall column with the proper texture
+ * 5. Draws the ceiling and floor for this column
+ *
+ * @param game Game structure containing rendering context and world map
+ * @param vars Main program variables structure
+ * @param rc Raycasting information for the current column
+ */
 void	render_column(t_game *game, t_vars *vars, t_ray_cast *rc)
 {
 	t_ray_cast_draw	rcw;

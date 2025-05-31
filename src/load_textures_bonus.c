@@ -1,22 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   load_textures_bonus.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 09:01:47 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/11 18:07:11 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Loads the first door texture (bonus feature)
+ *
+ * Loads the first door animation frame from a hardcoded file path "textures/door_1.xpm"
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param game Game structure containing the MLX context and texture arrays
+ */
 static void	door1(t_game *game)
 {
 	char	path[20];
 
-	ft_strcpy(path, "textures/door_1.xpm");
+	ft_strlcpy(path, "textures/door_1.xpm", sizeof(path));
 	game->textures[4].img = mlx_xpm_file_to_image(game->mlx, path,
 			&game->textures[4].width, &game->textures[4].height);
 	if (!game->textures[4].img)
@@ -27,11 +24,20 @@ static void	door1(t_game *game)
 			&game->textures[4].endian);
 }
 
+/**
+ * @brief Loads the second door texture (bonus feature)
+ *
+ * Loads the second door animation frame from a hardcoded file path "textures/door_2.xpm"
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param game Game structure containing the MLX context and texture arrays
+ */
 static void	door2(t_game *game)
 {
 	char	path[20];
 
-	ft_strcpy(path, "textures/door_2.xpm");
+	ft_strlcpy(path, "textures/door_2.xpm", sizeof(path));
 	game->textures[5].img = mlx_xpm_file_to_image(game->mlx, path,
 			&game->textures[5].width, &game->textures[5].height);
 	if (!game->textures[5].img)
@@ -42,11 +48,20 @@ static void	door2(t_game *game)
 			&game->textures[5].endian);
 }
 
+/**
+ * @brief Loads the third door texture (bonus feature)
+ *
+ * Loads the third door animation frame from a hardcoded file path "textures/door_3.xpm"
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param game Game structure containing the MLX context and texture arrays
+ */
 static void	door3(t_game *game)
 {
 	char	path[20];
 
-	ft_strcpy(path, "textures/door_3.xpm");
+	ft_strlcpy(path, "textures/door_3.xpm", sizeof(path));
 	game->textures[6].img = mlx_xpm_file_to_image(game->mlx, path,
 			&game->textures[6].width, &game->textures[6].height);
 	if (!game->textures[6].img)
@@ -57,11 +72,20 @@ static void	door3(t_game *game)
 			&game->textures[6].endian);
 }
 
+/**
+ * @brief Loads the fourth door texture (bonus feature)
+ *
+ * Loads the fourth door animation frame from a hardcoded file path "textures/door_4.xpm"
+ * and prepares the texture data for rendering. If the texture can't be loaded
+ * or if the data address retrieval fails, the program exits with an error.
+ *
+ * @param game Game structure containing the MLX context and texture arrays
+ */
 static void	door4(t_game *game)
 {
 	char	path[20];
 
-	ft_strcpy(path, "textures/door_4.xpm");
+	ft_strlcpy(path, "textures/door_4.xpm", sizeof(path));
 	game->textures[7].img = mlx_xpm_file_to_image(game->mlx, path,
 			&game->textures[7].width, &game->textures[7].height);
 	if (!game->textures[7].img)
@@ -72,6 +96,17 @@ static void	door4(t_game *game)
 			&game->textures[7].endian);
 }
 
+/**
+ * @brief Loads all bonus textures for animated doors
+ *
+ * Loads all four animated door textures by calling the 
+ * individual loading functions in sequence. These textures
+ * are only loaded when the program is compiled with the BONUS
+ * flag enabled.
+ *
+ * @param vars Main program variables structure containing the game data
+ * @return OK if all textures are successfully loaded
+ */
 int	load_textures_bonus(t_vars *vars)
 {
 	door1(vars->game);

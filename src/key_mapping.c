@@ -1,17 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   key_mapping.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/07 12:15:00 by mrubal-c          #+#    #+#             */
-/*   Updated: 2025/02/11 13:52:03 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Handle window close event
+ * 
+ * This function is called when the window close button is clicked or
+ * when the escape key is pressed. It performs proper cleanup and exits
+ * the program gracefully.
+ * 
+ * @param vars The main program structure
+ * @return Always returns 0
+ */
 int	close_window(t_vars *vars)
 {
 	clean_exit(vars);
@@ -19,6 +17,15 @@ int	close_window(t_vars *vars)
 	return (0);
 }
 
+/**
+ * @brief Handle door interaction
+ * 
+ * This function toggles doors adjacent to the player between opened (3)
+ * and closed (2) state when the player presses the interaction key.
+ * A cooldown is implemented to prevent rapid door toggling.
+ * 
+ * @param game Pointer to the game structure
+ */
 static void	manage_door(t_game *game)
 {
 	int	player_x;
@@ -47,6 +54,15 @@ static void	manage_door(t_game *game)
 	game->door_cooldown = 5;
 }
 
+/**
+ * @brief Update player movement based on active keys
+ * 
+ * This function is called each frame to process player movements
+ * based on which keys are currently being pressed. It handles
+ * movement in all directions, rotation, and door interaction.
+ * 
+ * @param game Pointer to the game structure
+ */
 void	update_movement(t_game *game)
 {
 	if (game->key_w)
@@ -65,6 +81,17 @@ void	update_movement(t_game *game)
 		manage_door(game);
 }
 
+/**
+ * @brief Handle key press events
+ * 
+ * This callback function is triggered when a key is pressed. It updates
+ * the state of movement keys and handles special actions like exiting
+ * the program when ESC is pressed.
+ * 
+ * @param key The keycode of the pressed key
+ * @param vars The main program structure
+ * @return Always returns 0
+ */
 int	key_press(int key, t_vars *vars)
 {
 	if (key == 65307)
@@ -86,6 +113,16 @@ int	key_press(int key, t_vars *vars)
 	return (0);
 }
 
+/**
+ * @brief Handle key release events
+ * 
+ * This callback function is triggered when a key is released. It updates
+ * the state of movement keys, resetting them to their inactive state.
+ * 
+ * @param key The keycode of the released key
+ * @param game Pointer to the game structure
+ * @return Always returns 0
+ */
 int	key_release(int key, t_game *game)
 {
 	if (key == 119)

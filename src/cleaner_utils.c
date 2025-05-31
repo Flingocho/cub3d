@@ -1,17 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleaner_utils.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvidal-t <jvidal-t@student.42madrid.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 13:47:49 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/11 14:06:58 by jvidal-t         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Free a dynamically allocated 2D character array
+ *
+ * This function properly deallocates a NULL-terminated 2D character array
+ * by freeing each string and then freeing the array of pointers itself.
+ *
+ * @param mtx The 2D character array (matrix) to free
+ */
 void	free_char_matrix(char **mtx)
 {
 	int	i;
@@ -22,6 +18,15 @@ void	free_char_matrix(char **mtx)
 	free(mtx);
 }
 
+/**
+ * @brief Free a dynamically allocated 2D integer array
+ *
+ * This function properly deallocates a 2D integer array of known height
+ * by freeing each row and then freeing the array of pointers itself.
+ *
+ * @param vars The main program structure (needed for map height)
+ * @param mtx The 2D integer array (matrix) to free
+ */
 void	free_int_matrix(t_vars *vars, int **mtx)
 {
 	int	i;
@@ -32,6 +37,14 @@ void	free_int_matrix(t_vars *vars, int **mtx)
 	free(mtx);
 }
 
+/**
+ * @brief Free all texture path strings
+ *
+ * This function deallocates all dynamically allocated strings that
+ * store the paths to texture files (north, south, east, west).
+ *
+ * @param vars The main program structure
+ */
 void	free_paths(t_vars *vars)
 {
 	free(vars->paths->no);
@@ -40,12 +53,29 @@ void	free_paths(t_vars *vars)
 	free(vars->paths->ea);
 }
 
+/**
+ * @brief Free color string values
+ *
+ * This function deallocates the dynamically allocated strings that
+ * store the ceiling and floor color values.
+ *
+ * @param vars The main program structure
+ */
 void	free_colors(t_vars *vars)
 {
 	free(vars->colors->c);
 	free(vars->colors->f);
 }
 
+/**
+ * @brief Free and destroy all loaded textures
+ *
+ * This function properly cleans up the texture resources by destroying
+ * the MLX image objects. It handles both standard textures (first 4)
+ * and optional bonus textures (next 4).
+ *
+ * @param game Pointer to the game structure containing textures
+ */
 void	free_textures(t_game *game)
 {
 	int	i;

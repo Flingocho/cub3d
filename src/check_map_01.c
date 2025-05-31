@@ -1,17 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   check_map_01.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mrubal-c <mrubal-c@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/04 15:50:03 by jvidal-t          #+#    #+#             */
-/*   Updated: 2025/02/15 13:49:21 by mrubal-c         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/cub3d.h"
 
+/**
+ * @brief Convert character map to integer grid for raycasting
+ * 
+ * This function transforms the map from its character representation ('0', '1', 'D')
+ * into an integer grid for the raycasting engine:
+ * - '0' (empty space) becomes 0
+ * - 'D' (door) becomes 2
+ * - Other characters (wall, spaces) become 1
+ * 
+ * @param vars The main program structure
+ */
 static void	set_matrix_int(t_vars *vars)
 {
 	int	i;
@@ -37,6 +36,18 @@ static void	set_matrix_int(t_vars *vars)
 	}
 }
 
+/**
+ * @brief Calculate map dimensions and allocate memory for the integer grid
+ * 
+ * This function:
+ * 1. Calculates the height and maximum width of the map
+ * 2. Allocates memory for the 2D integer grid representation
+ * 3. Converts the character map to an integer grid
+ * 4. Performs flood fill validation to ensure the map is enclosed
+ * 
+ * @param vars The main program structure
+ * @return OK if successful, ERROR if memory allocation fails or map is invalid
+ */
 static int	map_dimensions(t_vars *vars)
 {
 	int	i;
@@ -45,7 +56,7 @@ static int	map_dimensions(t_vars *vars)
 	while (vars->map[i])
 	{
 		if ((size_t)vars->game->map_width < ft_strlen(vars->map[i]))
-			vars->game->map_width = ft_strlen(vars->map[i]);
+			vars->game->map_width = ft_strlen(vars->map[i]);  /* Find max width */
 		i++;
 	}
 	vars->game->map_height = i;
@@ -66,6 +77,16 @@ static int	map_dimensions(t_vars *vars)
 	return (OK);
 }
 
+/**
+ * @brief Check that exactly one player starting position is defined
+ * 
+ * This function verifies that the map contains exactly one player starting
+ * position marker (N, S, E, or W). Having zero or multiple starting positions
+ * would make the map invalid.
+ * 
+ * @param map The 2D character array representing the map
+ * @return OK if exactly one starting position exists, ERROR otherwise
+ */
 static int	check_repeated_position(char **map)
 {
 	int	i;
@@ -92,6 +113,18 @@ static int	check_repeated_position(char **map)
 	return (ERROR);
 }
 
+/**
+ * @brief Master function for validating the map
+ * 
+ * This function performs several checks to ensure the map is valid:
+ * 1. Verifies there's exactly one player starting position
+ * 2. Ensures all characters in the map are valid
+ * 3. Converts spaces to walls ('1') for proper boundary handling
+ * 4. Processes map dimensions and creates the integer grid
+ * 
+ * @param vars The main program structure
+ * @return OK if the map is valid, ERROR otherwise
+ */
 int	check_map_valid(t_vars *vars)
 {
 	int	i;
